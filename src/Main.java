@@ -66,12 +66,16 @@ public class Main {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
 
         // Crear paneles personalizados para representar los tipos de personajes
-        centerPanel.add(createPersonajePanel("Guerrero", "Fuerte y resistente", "guerrero.png"));
-        centerPanel.add(createPersonajePanel("Arquero", "Preciso y letal", "arquero.png"));
-        centerPanel.add(createPersonajePanel("Hechicero", "Maestro del poder mágico", "hechicero.png"));
-        centerPanel.add(createPersonajePanel("Invocador", "Controlador de criaturas", "invocador.png"));
-        centerPanel.add(createPersonajePanel("GranyHunter", "Cazador de abuelitas", "granyhunter.png"));
-        centerPanel.add(createPersonajePanel("Tanque", "Escudo del equipo", "tanque.png"));
+        centerPanel.add(createPersonajePanel("Guerrero", "Fuerte y resistente", "./photos/guerrero.jfif"));
+        centerPanel.add(createPersonajePanel("Arquera", "Precisa y letal", "./photos/arquera.jfif"));
+        centerPanel.add(createPersonajePanel("Hechicero", "Maestro del poder mágico", "./photos/hechicero.jfif"));
+        centerPanel.add(createPersonajePanel("Invocador", "Controlador de criaturas", "./photos/invocador.jfif"));
+        centerPanel.add(createPersonajePanel("GranyHunter", "Cazador voraz", "./photos/granyhunter.jfif"));
+        centerPanel.add(createPersonajePanel("Tanque", "Escudo del equipo", "./photos/tanque.jfif"));
+        centerPanel.add(createPersonajePanel("MilfSlayer", "Berserker imparable", "./photos/milfslayer.jfif"));
+        centerPanel.add(createPersonajePanel("Asesino", "Veloz y sigiloso", "./photos/asesino.jfif"));
+        centerPanel.add(createPersonajePanel("Paladin", "Soporte del equipo", "./photos/paladin.jfif"));
+        centerPanel.add(createPersonajePanel("Proximamente", "Se vienen cositas", "./photos/new.jfif"));
 
         mainContainer.add(centerPanel, BorderLayout.CENTER);
 
