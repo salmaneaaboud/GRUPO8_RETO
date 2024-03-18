@@ -20,5 +20,15 @@ public class Main {
         northPanel.add(new JButton("Others"));
         mainContainer.add(northPanel, BorderLayout.NORTH);
 
+
+        // South area with BoxLayout and height of 50
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
+        southPanel.add(new JButton("Log in"));
+        southPanel.add(new JButton("Sign in"));
+        southPanel.setPreferredSize(new Dimension(0, 50));
+        mainContainer.add(southPanel, BorderLayout.SOUTH);
+
+        frame.setVisible(true);
     }
 }
