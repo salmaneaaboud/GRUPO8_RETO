@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Jugador {
     private String idJugador;
     private String rango;
@@ -61,5 +63,32 @@ public class Jugador {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Jugador jugador = (Jugador) o;
+        return Objects.equals(idJugador, jugador.idJugador) && Objects.equals(clave, jugador.clave) && Objects.equals(email, jugador.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idJugador, clave, email);
+    }
+
+    @Override
+    public String toString() {
+        return "Jugador{" +
+                "idJugador='" + idJugador + '\'' +
+                ", rango='" + rango + '\'' +
+                ", nivel=" + nivel +
+                ", nombre='" + nombre + '\'' +
+                ", clave='" + clave + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
