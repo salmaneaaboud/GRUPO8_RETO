@@ -40,10 +40,10 @@ public class Usuario {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
 
         // Crear paneles personalizados para representar los personajes del usuario
+        centerPanel.add(createPersonajePanel("Chayane", "Invocador Nivel: 90", "./photos/invocador.jfif"));
         centerPanel.add(createPersonajePanel("Gandalf", "Hechicero Nivel: 45", "./photos/hechicero.jfif"));
-        centerPanel.add(createPersonajePanel("Chayane", "Controlador de criaturas", "./photos/invocador.jfif"));
-        centerPanel.add(createPersonajePanel("Ibai", "Veloz y sigiloso", "./photos/tanque.jfif"));
-        centerPanel.add(createPersonajePanel("Jesus", "Soporte del equipo", "./photos/paladin.jfif"));
+        centerPanel.add(createPersonajePanel("Ibai", "Tanque Nivel: 10", "./photos/tanque.jfif"));
+        centerPanel.add(createPersonajePanel("Jesus", "Paladin Nivel: 33", "./photos/paladin.jfif"));
         centerPanel.add(createPersonajePanel("Añadir nuevo personaje", "", "./photos/añadir.png"));
 
         mainContainer.add(centerPanel, BorderLayout.CENTER);
