@@ -24,7 +24,7 @@ public class Admin {
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Página Principal");
+        JFrame frame = new JFrame("Admin");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
 
