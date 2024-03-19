@@ -44,7 +44,7 @@ public class PaginaPrincipal {
         centerPanel.add(createPersonajePanel("Arquera", "Precisa y letal", "./photos/arquera.jfif"));
         centerPanel.add(createPersonajePanel("Hechicero", "Maestro del poder mágico", "./photos/hechicero.jfif"));
         centerPanel.add(createPersonajePanel("Invocador", "Controlador de criaturas", "./photos/invocador.jfif"));
-        centerPanel.add(createPersonajePanel("GranyHunter", "Cazador voraz", "./photos/granyhunter.jfif"));
+        centerPanel.add(createPersonajePanel("GranyHunter", "Cazador voraz", "./photos/granyhunter.png"));
         centerPanel.add(createPersonajePanel("Tanque", "Escudo del equipo", "./photos/tanque.jfif"));
         centerPanel.add(createPersonajePanel("MilfSlayer", "Berserker imparable", "./photos/milfslayer.jfif"));
         centerPanel.add(createPersonajePanel("Asesino", "Veloz y sigiloso", "./photos/asesino.jfif"));
