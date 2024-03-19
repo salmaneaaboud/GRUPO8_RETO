@@ -18,7 +18,6 @@ public class PaginaPrincipal {
         northPanel.add(new JButton("Clasificación"));
         northPanel.add(new JButton("Misiones"));
         northPanel.add(new JButton("Regiones"));
-        northPanel.add(new JButton("Gremios"));
         northPanel.add(new JButton("Noticias"));
         mainContainer.add(northPanel, BorderLayout.NORTH);
 
@@ -37,8 +36,8 @@ public class PaginaPrincipal {
 
         // Centro con GridLayout simulando una cuadrícula de juegos
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(2, 5, 10, 10)); // 2 filas, 3 columnas, espacio horizontal y vertical de 10
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
+        centerPanel.setLayout(new GridLayout(2, 5, 10, 10));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Crear paneles personalizados para representar los tipos de personajes
         centerPanel.add(createPersonajePanel("Guerrero", "Fuerte y resistente", "./photos/guerrero.jfif"));
