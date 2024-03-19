@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Main {
+public class Usuario {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Página Principal");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,31 +28,8 @@ public class Main {
         JButton loginButton = new JButton("Iniciar sesión");
         JButton signupButton = new JButton("Registrarse");
         // Agregar ActionListener para el botón de inicio de sesión
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para iniciar sesión
-                JFrame loginFrame = new JFrame("Iniciar sesión");
-                loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                loginFrame.setSize(300, 200);
-                loginFrame.setLocationRelativeTo(null); // Centra la ventana
-                // Añade componentes para el inicio de sesión (por ejemplo, campos de usuario y contraseña)
-                loginFrame.setVisible(true);
-            }
-        });
-        // Agregar ActionListener para el botón de registro
-        signupButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Abre una nueva ventana para registrarse
-                JFrame signupFrame = new JFrame("Registrarse");
-                signupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                signupFrame.setSize(300, 200);
-                signupFrame.setLocationRelativeTo(null); // Centra la ventana
-                // Añade componentes para el registro (por ejemplo, campos de usuario, contraseña, correo electrónico, etc.)
-                signupFrame.setVisible(true);
-            }
-        });
+        // Todavia no implementar
+
         southPanel.add(loginButton);
         southPanel.add(signupButton);
         southPanel.setPreferredSize(new Dimension(0, 50));
