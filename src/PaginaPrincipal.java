@@ -37,7 +37,7 @@ public class PaginaPrincipal {
 
         // Centro con GridLayout simulando una cuadrícula de juegos
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(2, 3, 10, 10)); // 2 filas, 3 columnas, espacio horizontal y vertical de 10
+        centerPanel.setLayout(new GridLayout(2, 5, 10, 10)); // 2 filas, 3 columnas, espacio horizontal y vertical de 10
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
 
         // Crear paneles personalizados para representar los tipos de personajes
