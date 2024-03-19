@@ -34,39 +34,40 @@ public class Usuario {
         southPanel.setPreferredSize(new Dimension(0, 50));
         mainContainer.add(southPanel, BorderLayout.SOUTH);
 
-        // Centro con GridLayout simulando una cuadrícula de juegos
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(4, 2, 10, 10)); // 2 filas, 3 columnas, espacio horizontal y vertical de 10
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
+        // Centro con BoxLayout simulando una cuadrícula de juegos
+        Box centerBox = Box.createVerticalBox();
+        centerBox.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
 
-        // Crear panel para ver el perfil de un personaje, primera fila nombre de usuario tipo y foto del personaje, segunda la vida y el mana del personaje, tercera estadisticas del personaje y cuarta los objetos y habilidades
-        centerPanel.add(createPersonajePanel("Username", "Invocador", "./photos/invocador.jfif", "4500 y 250", "prueba", "prueba"));
+        // Crear panel para ver el perfil de un personaje
+        centerBox.add(createPersonajePanel("Username", "Invocador", "./photos/invocador.jfif", "4500 y 250", "prueba", "prueba"));
 
-        mainContainer.add(centerPanel, BorderLayout.CENTER);
+        mainContainer.add(centerBox, BorderLayout.CENTER);
 
         frame.setVisible(true);
     }
 
     // Método para crear un panel personalizado para representar un tipo de personaje
-    private static JPanel createPersonajePanel(String nombre, String tipo, String imagePath, String vidaMana, String estadisticas, String habilidades) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 1)); // Establecer un diseño de cuadrícula de 4 filas y 1 columna
+    private static Box createPersonajePanel(String nombre, String tipo, String imagePath, String vidaMana, String estadisticas, String habilidades) {
+        Box panel = Box.createVerticalBox(); // Cambiar a Box vertical
 
         // Primera fila: Nombre de usuario, tipo y foto del personaje
         JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout());
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS)); // Cambiar el layout a Box vertical
+
+        // Ajustar el tamaño mínimo del panel superior
+        topPanel.setMinimumSize(new Dimension(topPanel.getPreferredSize().width, 300)); // Cambiar 300 a la altura deseada
 
         // Etiqueta para el nombre de usuario
         JLabel nombreLabel = new JLabel("Nombre: " + nombre);
-        topPanel.add(nombreLabel);
+        topPanel.add(nombreLabel); // Añadir la etiqueta del nombre
 
         // Etiqueta para el tipo de personaje
         JLabel tipoLabel = new JLabel("Tipo: " + tipo);
-        topPanel.add(tipoLabel);
+        topPanel.add(tipoLabel); // Añadir la etiqueta del tipo
 
         // Etiqueta para la foto del personaje (se asume que se proporciona la ruta de la imagen)
         JLabel imagenLabel = new JLabel(new ImageIcon(imagePath));
-        topPanel.add(imagenLabel);
+        topPanel.add(imagenLabel); // Añadir la imagen
 
         panel.add(topPanel);
 
