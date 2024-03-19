@@ -36,11 +36,11 @@ public class Usuario {
 
         // Centro con GridLayout simulando una cuadrícula de juegos
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(3, 2, 10, 10)); // 2 filas, 3 columnas, espacio horizontal y vertical de 10
+        centerPanel.setLayout(new GridLayout(4, 2, 10, 10)); // 2 filas, 3 columnas, espacio horizontal y vertical de 10
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
 
-        // Crear paneles personalizados para representar los tipos de personajes
-        centerPanel.add(createPersonajePanel("Username", "Invocador", "./photos/invocador.jfif"));
+        // Crear panel para ver el perfil de un personaje, primera fila nombre de usuario tipo y foto del personaje, segunda la vida y el mana del personaje, tercera estadisticas del personaje y cuarta los objetos y habilidades
+        centerPanel.add(createPersonajePanel("Username", "Invocador", "./photos/invocador.jfif", "4500 y 250", "prueba", "prueba"));
 
         mainContainer.add(centerPanel, BorderLayout.CENTER);
 
@@ -48,24 +48,50 @@ public class Usuario {
     }
 
     // Método para crear un panel personalizado para representar un tipo de personaje
-    private static JPanel createPersonajePanel(String nombre, String descripcion, String imagePath) {
+    private static JPanel createPersonajePanel(String nombre, String tipo, String imagePath, String vidaMana, String estadisticas, String habilidades) {
         JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+        panel.setLayout(new GridLayout(4, 1)); // Establecer un diseño de cuadrícula de 4 filas y 1 columna
 
-        // Etiqueta para la imagen
+        // Primera fila: Nombre de usuario, tipo y foto del personaje
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout());
+
+        // Etiqueta para el nombre de usuario
+        JLabel nombreLabel = new JLabel("Nombre: " + nombre);
+        topPanel.add(nombreLabel);
+
+        // Etiqueta para el tipo de personaje
+        JLabel tipoLabel = new JLabel("Tipo: " + tipo);
+        topPanel.add(tipoLabel);
+
+        // Etiqueta para la foto del personaje (se asume que se proporciona la ruta de la imagen)
         JLabel imagenLabel = new JLabel(new ImageIcon(imagePath));
-        panel.add(imagenLabel, BorderLayout.CENTER);
+        topPanel.add(imagenLabel);
 
-        // Panel para el nombre y descripción
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        JLabel nombreLabel = new JLabel(nombre);
-        JLabel descripcionLabel = new JLabel(descripcion);
-        infoPanel.add(nombreLabel);
-        infoPanel.add(descripcionLabel);
+        panel.add(topPanel);
 
-        panel.add(infoPanel, BorderLayout.SOUTH);
+        // Segunda fila: Vida y mana del personaje
+        JPanel vidaManaPanel = new JPanel();
+        vidaManaPanel.setLayout(new FlowLayout());
+        JLabel vidaManaLabel = new JLabel("Vida y Mana: " + vidaMana);
+        vidaManaPanel.add(vidaManaLabel);
+        panel.add(vidaManaPanel);
+
+        // Tercera fila: Estadísticas del personaje
+        JPanel estadisticasPanel = new JPanel();
+        estadisticasPanel.setLayout(new FlowLayout());
+        JLabel estadisticasLabel = new JLabel("Estadísticas: " + estadisticas);
+        estadisticasPanel.add(estadisticasLabel);
+        panel.add(estadisticasPanel);
+
+        // Cuarta fila: Objetos y habilidades del personaje
+        JPanel habilidadesPanel = new JPanel();
+        habilidadesPanel.setLayout(new FlowLayout());
+        JLabel habilidadesLabel = new JLabel("Habilidades: " + habilidades);
+        habilidadesPanel.add(habilidadesLabel);
+        panel.add(habilidadesPanel);
 
         return panel;
     }
+
 }
