@@ -1,8 +1,29 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.util.*;
 
 public class Admin {
+    private static Map<String, ArrayList<String>> usuariosPersonajesMap;
+
     public static void main(String[] args) {
+        usuariosPersonajesMap = new HashMap<>();
+
+        // Inicialización del HashMap con algunos datos de muestra
+        for (int i = 0; i < 10; i++) {
+            String usuario = "Usuario" + (i + 1);
+            ArrayList<String> personajes = new ArrayList<>();
+            for (int j = 0; j < 5; j++) {
+                personajes.add("Personaje" + (i * 5 + j + 1));
+            }
+            usuariosPersonajesMap.put(usuario, personajes);
+        }
+
+        SwingUtilities.invokeLater(() -> createAndShowGUI());
+    }
+
+    private static void createAndShowGUI() {
         JFrame frame = new JFrame("Página Principal");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
@@ -37,51 +58,53 @@ public class Admin {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.LINE_AXIS));
 
         // Panel para la lista de usuarios a la izquierda
-        centerPanel.add(createUserListPanel());
+        JList<String> userList = createUserListPanel();
+        centerPanel.add(new JScrollPane(userList));
 
         // Panel para la lista de personajes en la parte superior derecha
-        centerPanel.add(createCharactersListPanel());
+        JList<String> charactersList = createCharactersListPanel();
+        centerPanel.add(new JScrollPane(charactersList));
 
         // Panel para los cambios posibles en la parte inferior derecha
         centerPanel.add(createChangesPanel());
 
         mainContainer.add(centerPanel, BorderLayout.CENTER);
 
+        // Listener para la selección de usuario
+        userList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    String selectedUser = userList.getSelectedValue();
+                    if (selectedUser != null && usuariosPersonajesMap.containsKey(selectedUser)) {
+                        ArrayList<String> personajes = usuariosPersonajesMap.get(selectedUser);
+                        DefaultListModel<String> model = new DefaultListModel<>();
+                        for (String personaje : personajes) {
+                            model.addElement(personaje);
+                        }
+                        charactersList.setModel(model);
+                    }
+                }
+            }
+        });
+
         frame.setVisible(true);
     }
 
-    // Método para crear un panel que contenga la lista de usuarios
-    private static JPanel createUserListPanel() {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder("Lista de Usuarios"));
-
-        // Simulación de lista de usuarios
-        String[] usuarios = new String[30];
-        for(int i = 0; i < usuarios.length; i++){
-            usuarios[i] = "Usuario" + (i+1);
+    // Método para crear un JList que contenga la lista de usuarios
+    private static JList<String> createUserListPanel() {
+        DefaultListModel<String> userListModel = new DefaultListModel<>();
+        for (String usuario : usuariosPersonajesMap.keySet()) {
+            userListModel.addElement(usuario);
         }
-        JList<String> userList = new JList<>(usuarios);
-        JScrollPane scrollPane = new JScrollPane(userList);
-        panel.add(scrollPane);
-
-        return panel;
+        JList<String> userList = new JList<>(userListModel);
+        userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        return userList;
     }
 
-    // Método para crear un panel que contenga la lista de personajes
-    private static JPanel createCharactersListPanel() {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder("Lista de Personajes"));
-
-        // Simulación de lista de personajes
-        String[] personajes =  new String[30];
-        for(int i = 0; i < personajes.length; i++){
-            personajes[i] = "Personaje" + (i+1);
-        }
-        JList<String> charactersList = new JList<>(personajes);
-        JScrollPane scrollPane = new JScrollPane(charactersList);
-        panel.add(scrollPane);
-
-        return panel;
+    // Método para crear un JList que contenga la lista de personajes
+    private static JList<String> createCharactersListPanel() {
+        return new JList<>();
     }
 
     // Método para crear un panel que contenga los cambios posibles
