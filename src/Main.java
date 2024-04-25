@@ -10,43 +10,43 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static Map<String, String[]> usuariosMap;
+    private static Map<String, String[]> usersMap;
 
     public static void main(String[] args) {
-        usuariosMap = cargarUsuariosDesdeArchivo("usuarios.txt");
+        usersMap = loadUsersFromFile("users.txt");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Aplicación Principal");
+        JFrame frame = new JFrame("Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
 
-        // Contenedor principal con BorderLayout
+        // Main container with BorderLayout
         Container mainContainer = frame.getContentPane();
         mainContainer.setLayout(new BorderLayout());
 
-        // Área Norte con FlowLayout
+        // North Area with FlowLayout
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
-        northPanel.add(new JButton("Personajes"));
-        northPanel.add(new JButton("Clasificación"));
-        northPanel.add(new JButton("Misiones"));
-        northPanel.add(new JButton("Regiones"));
-        northPanel.add(new JButton("Noticias"));
+        northPanel.add(new JButton("Characters"));
+        northPanel.add(new JButton("Ranking"));
+        northPanel.add(new JButton("Missions"));
+        northPanel.add(new JButton("Regions"));
+        northPanel.add(new JButton("News"));
         mainContainer.add(northPanel, BorderLayout.NORTH);
 
-        // Área Sur con BoxLayout y altura de 50
+        // South Area with BoxLayout and height of 50
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
-        JButton loginButton = new JButton("Iniciar sesión");
+        JButton loginButton = new JButton("Log in");
 
-        // Agregar ActionListener para el botón de inicio de sesión
+        // Adding ActionListener for the log in button
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Mostrar formulario de inicio de sesión
+                // Show login form
                 showLoginForm(frame);
             }
         });
@@ -55,44 +55,55 @@ public class Main {
         southPanel.setPreferredSize(new Dimension(0, 50));
         mainContainer.add(southPanel, BorderLayout.SOUTH);
 
-        // Centro con GridLayout simulando una cuadrícula de juegos
+        // Center with GridLayout simulating a grid of games
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridLayout(2, 5, 10, 10));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
-        // Crear paneles personalizados para representar los tipos de personajes
-        centerPanel.add(createPersonajePanel("Guerrero", "Fuerte y resistente", "./photos/guerrero.jfif"));
-        centerPanel.add(createPersonajePanel("Arquera", "Precisa y letal", "./photos/arquera.jfif"));
-        centerPanel.add(createPersonajePanel("Hechicero", "Maestro del poder mágico", "./photos/hechicero.jfif"));
-        centerPanel.add(createPersonajePanel("Invocador", "Controlador de criaturas", "./photos/invocador.jfif"));
-        centerPanel.add(createPersonajePanel("GranyHunter", "Cazador voraz", "./photos/granyhunter.png"));
-        centerPanel.add(createPersonajePanel("Tanque", "Escudo del equipo", "./photos/tanque.jfif"));
-        centerPanel.add(createPersonajePanel("MilfSlayer", "Berserker imparable", "./photos/milfslayer.jfif"));
-        centerPanel.add(createPersonajePanel("Asesino", "Veloz y sigiloso", "./photos/asesino.jfif"));
-        centerPanel.add(createPersonajePanel("Paladin", "Soporte del equipo", "./photos/paladin.jfif"));
-        centerPanel.add(createPersonajePanel("Proximamente", "Se vienen cositas", "./photos/new.jfif"));
+        // Creating custom panels to represent character types
+        centerPanel.add(createCharacterPanel("Warrior", "Strong and resilient", "./photos/warrior.jfif"));
+        centerPanel.add(createCharacterPanel("Archer", "Precise and lethal", "./photos/archer.jfif"));
+        centerPanel.add(createCharacterPanel("Wizard", "Master of magical power", "./photos/wizard.jfif"));
+        centerPanel.add(createCharacterPanel("Summoner", "Creature controller", "./photos/summoner.jfif"));
+        centerPanel.add(createCharacterPanel("Hunter", "Voracious hunter", "./photos/granyhunter.png"));
+        centerPanel.add(createCharacterPanel("Tank", "Team shield", "./photos/tank.jfif"));
+        centerPanel.add(createCharacterPanel("Slayer", "Unstoppable berserker", "./photos/milfslayer.jfif"));
+        centerPanel.add(createCharacterPanel("Assassin", "Swift and stealthy", "./photos/assassin.jfif"));
+        centerPanel.add(createCharacterPanel("Paladin", "Team support", "./photos/paladin.jfif"));
+        centerPanel.add(createCharacterPanel("Coming Soon", "Exciting things coming", "./photos/new.jfif"));
 
         mainContainer.add(centerPanel, BorderLayout.CENTER);
 
         frame.setVisible(true);
     }
 
-    // Método para crear un panel personalizado para representar un tipo de personaje
-    private static JPanel createPersonajePanel(String nombre, String descripcion, String imagePath) {
+    // Method to create a custom panel to represent a character type
+    private static JPanel createCharacterPanel(String name, String description, String imagePath) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        // Etiqueta para la imagen
-        JLabel imagenLabel = new JLabel(new ImageIcon(imagePath));
-        panel.add(imagenLabel, BorderLayout.CENTER);
+        // Label for the image
+        ImageIcon icon = new ImageIcon(imagePath);
+        JLabel imageLabel = new JLabel(icon);
+        imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                Image img = icon.getImage();
+                Image newImg = img.getScaledInstance(icon.getIconWidth() + 50, icon.getIconHeight() + 50, java.awt.Image.SCALE_SMOOTH);
+                imageLabel.setIcon(new ImageIcon(newImg));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                imageLabel.setIcon(icon);
+            }
+        });
+        panel.add(imageLabel, BorderLayout.CENTER);
 
-        // Panel para el nombre y descripción
+        // Panel for name and description
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        JLabel nombreLabel = new JLabel(nombre);
-        JLabel descripcionLabel = new JLabel(descripcion);
-        infoPanel.add(nombreLabel);
-        infoPanel.add(descripcionLabel);
+        JLabel nameLabel = new JLabel(name);
+        JLabel descriptionLabel = new JLabel(description);
+        infoPanel.add(nameLabel);
+        infoPanel.add(descriptionLabel);
 
         panel.add(infoPanel, BorderLayout.SOUTH);
 
@@ -100,49 +111,47 @@ public class Main {
     }
 
     private static void showLoginForm(JFrame parentFrame) {
-        JFrame loginFrame = new JFrame("Inicio de Sesión");
+        JFrame loginFrame = new JFrame("Log In");
         loginFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginFrame.setSize(300, 150);
         loginFrame.setLocationRelativeTo(parentFrame);
 
         JPanel panel = new JPanel(new GridLayout(3, 2));
 
-        JLabel userLabel = new JLabel("Usuario:");
+        JLabel userLabel = new JLabel("Username:");
         JTextField userText = new JTextField();
-        JLabel passwordLabel = new JLabel("Contraseña:");
+        JLabel passwordLabel = new JLabel("Password:");
         JPasswordField passwordText = new JPasswordField();
-        JButton loginButton = new JButton("Iniciar sesión");
-        JButton cancelButton = new JButton("Cancelar");
+        JButton loginButton = new JButton("Log in");
+        JButton cancelButton = new JButton("Cancel");
 
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String usuario = userText.getText();
+                String username = userText.getText();
                 char[] password = passwordText.getPassword();
-                String contraseña = new String(password);
-                int tipoUsuario = authenticateUser(usuario, contraseña);
-                if (tipoUsuario == 0) {
-                    // Iniciar sesión como usuario
-                    loginFrame.dispose(); // Cerrar el frame de inicio de sesión
-                    parentFrame.dispose(); // Cerrar el frame actual
-                    JFrame userFrame = new JFrame("Usuario"); // Crear un nuevo frame para el usuario
-                    // Crear y mostrar el panel del usuario
+                String passwordString = new String(password);
+                int userType = authenticateUser(username, passwordString);
+                if (userType == 0) {
+                    // Log in as user
+                    loginFrame.dispose(); // Close login frame
+                    parentFrame.dispose(); // Close current frame
+                    JFrame userFrame = new JFrame("User"); // Create a new frame for the user
                     userFrame.getContentPane().add(createUserPanel());
                     userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     userFrame.setSize(1000, 600);
                     userFrame.setVisible(true);
-                } else if (tipoUsuario == 1) {
-                    // Iniciar sesión como administrador
-                    loginFrame.dispose(); // Cerrar el frame de inicio de sesión
-                    parentFrame.dispose(); // Cerrar el frame actual
-                    JFrame adminFrame = new JFrame("Admin"); // Crear un nuevo frame para el administrador
-                    // Crear y mostrar el panel del administrador
+                } else if (userType == 1) {
+                    // Log in as admin
+                    loginFrame.dispose(); // Close login frame
+                    parentFrame.dispose(); // Close current frame
+                    JFrame adminFrame = new JFrame("Admin"); // Create a new frame for the admin
                     adminFrame.getContentPane().add(createAdminPanel());
                     adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     adminFrame.setSize(1000, 600);
                     adminFrame.setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(loginFrame, "Usuario o contraseña incorrectos.");
+                    JOptionPane.showMessageDialog(loginFrame, "Incorrect username or password.");
                 }
             }
         });
@@ -150,7 +159,7 @@ public class Main {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginFrame.dispose(); // Cerrar el frame de inicio de sesión
+                loginFrame.dispose(); // Close login frame
             }
         });
 
@@ -165,72 +174,79 @@ public class Main {
         loginFrame.setVisible(true);
     }
 
-    // Método para autenticar al usuario
-    private static int authenticateUser(String usuario, String contraseña) {
-        if (usuariosMap.containsKey(usuario)) {
-            String[] userData = usuariosMap.get(usuario);
-            if (userData[0].equals(contraseña)) {
+    // Method to authenticate the user
+    private static int authenticateUser(String username, String password) {
+        if (usersMap.containsKey(username)) {
+            String[] userData = usersMap.get(username);
+            if (userData[0].equals(password)) {
                 return Integer.parseInt(userData[1]);
             }
         }
         return -1;
     }
 
-    // Método para cargar los usuarios desde el archivo
-    private static Map<String, String[]> cargarUsuariosDesdeArchivo(String filename) {
-        Map<String, String[]> usuarios = new HashMap<>();
+    // Method to load users from file
+    private static Map<String, String[]> loadUsersFromFile(String filename) {
+        Map<String, String[]> users = new HashMap<>();
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                String[] datos = scanner.nextLine().split(" ");
-                usuarios.put(datos[0], new String[]{datos[1], datos[2]});
+                String[] data = scanner.nextLine().split(" ");
+                users.put(data[0], new String[]{data[1], data[2]});
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.err.println("No se pudo encontrar el archivo: " + filename);
+            System.err.println("File not found: " + filename);
             e.printStackTrace();
         }
-        return usuarios;
+        return users;
     }
 
     private static JPanel createUserPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Área Norte con FlowLayout
+        // North Area with FlowLayout
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
-        northPanel.add(new JButton("Personajes"));
-        northPanel.add(new JButton("Mensajes"));
-        northPanel.add(new JButton("Clasificación"));
-        northPanel.add(new JButton("Misiones"));
-        northPanel.add(new JButton("Regiones"));
-        northPanel.add(new JButton("Gremio"));
-        northPanel.add(new JButton("Noticias"));
+        northPanel.add(new JButton("Characters"));
+        northPanel.add(new JButton("Messages"));
+        northPanel.add(new JButton("Ranking"));
+        northPanel.add(new JButton("Missions"));
+        northPanel.add(new JButton("Regions"));
+        northPanel.add(new JButton("Guild"));
+        northPanel.add(new JButton("News"));
         panel.add(northPanel, BorderLayout.NORTH);
 
-        // Área Sur con BoxLayout y altura de 50
+        // South Area with BoxLayout and height of 50
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
         JButton logoutButton = new JButton("Log out");
-        // Agregar ActionListener para el botón de cierre de sesión
-        // Todavía no implementado
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Log out and restart the application
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+                topFrame.dispose(); // Close current frame
+                createAndShowGUI(); // Restart the application
+            }
+        });
 
         southPanel.add(logoutButton);
         southPanel.setPreferredSize(new Dimension(0, 50));
         panel.add(southPanel, BorderLayout.SOUTH);
 
-        // Centro con GridLayout simulando una cuadrícula de juegos
+        // Center with GridLayout simulating a grid of characters
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridLayout(2, 5, 10, 10));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Espacio alrededor del panel
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
-        // Crear paneles personalizados para representar los personajes del usuario
-        centerPanel.add(createPersonajePanel("Chayane", "Invocador Nivel: 90", "./photos/invocador.jfif"));
-        centerPanel.add(createPersonajePanel("Gandalf", "Hechicero Nivel: 45", "./photos/hechicero.jfif"));
-        centerPanel.add(createPersonajePanel("Ibai", "Tanque Nivel: 10", "./photos/tanque.jfif"));
-        centerPanel.add(createPersonajePanel("Jesus", "Paladin Nivel: 33", "./photos/paladin.jfif"));
-        centerPanel.add(createPersonajePanel("Añadir nuevo personaje", "", "./photos/añadir.png"));
+        // Creating custom panels to represent user's characters
+        centerPanel.add(createCharacterPanel("Chayane", "Summoner Level: 90", "./photos/summoner.jfif"));
+        centerPanel.add(createCharacterPanel("Gandalf", "Wizard Level: 45", "./photos/wizard.jfif"));
+        centerPanel.add(createCharacterPanel("Ibai", "Tank Level: 10", "./photos/tank.jfif"));
+        centerPanel.add(createCharacterPanel("Jesus", "Paladin Level: 33", "./photos/paladin.jfif"));
+        centerPanel.add(createCharacterPanel("Add New Character", "", "./photos/add.png"));
 
         panel.add(centerPanel, BorderLayout.CENTER);
 
@@ -240,41 +256,48 @@ public class Main {
     private static JPanel createAdminPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Área Norte con FlowLayout
+        // North Area with FlowLayout
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
-        northPanel.add(new JButton("Gestion de Usuario"));
-        northPanel.add(new JButton("Gestion de Gremios"));
-        northPanel.add(new JButton("Estadisticas avanzadas"));
-        northPanel.add(new JButton("Sistema"));
-        northPanel.add(new JButton("Soporte"));
+        northPanel.add(new JButton("User Management"));
+        northPanel.add(new JButton("Guild Management"));
+        northPanel.add(new JButton("Advanced Statistics"));
+        northPanel.add(new JButton("System"));
+        northPanel.add(new JButton("Support"));
         panel.add(northPanel, BorderLayout.NORTH);
 
-        // Área Sur con BoxLayout y altura de 50
+        // South Area with BoxLayout and height of 50
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
-        JButton loginButton = new JButton("Cerrar sesión");
-        // Agregar ActionListener para el botón de cierre de sesión
-        // Todavía no implementado
+        JButton logoutButton = new JButton("Log out");
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Log out and restart the application
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+                topFrame.dispose(); // Close current frame
+                createAndShowGUI(); // Restart the application
+            }
+        });
 
-        southPanel.add(loginButton);
+        southPanel.add(logoutButton);
         southPanel.setPreferredSize(new Dimension(0, 50));
         panel.add(southPanel, BorderLayout.SOUTH);
 
-        // Centro con BoxLayout y división en tres partes
+        // Center with BoxLayout divided into three parts
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.LINE_AXIS));
 
-        // Panel para la lista de usuarios a la izquierda
+        // Panel for user list on the left
         JList<String> userList = createUserListPanel();
         centerPanel.add(new JScrollPane(userList));
 
-        // Panel para la lista de personajes en la parte superior derecha
+        // Panel for character list on the top right
         JList<String> charactersList = createCharactersListPanel();
         centerPanel.add(new JScrollPane(charactersList));
 
-        // Panel para los cambios posibles en la parte inferior derecha
-        // Aquí deberías implementar o eliminar este panel según tus necesidades
+        // Panel for possible changes on the bottom right
+        // You should implement or remove this panel based on your needs
         // centerPanel.add(createChangesPanel());
 
         panel.add(centerPanel, BorderLayout.CENTER);
@@ -282,19 +305,19 @@ public class Main {
         return panel;
     }
 
-    // Método para crear un JList que contenga la lista de usuarios
+    // Method to create a JList containing the list of users
     private static JList<String> createUserListPanel() {
         DefaultListModel<String> userListModel = new DefaultListModel<>();
-        for (String usuario : usuariosMap.keySet()) {
-            userListModel.addElement(usuario);
+        for (String user : usersMap.keySet()) {
+            userListModel.addElement(user);
         }
         return new JList<>(userListModel);
     }
 
-    // Método para crear un JList que contenga la lista de personajes
+    // Method to create a JList containing the list of characters
     private static JList<String> createCharactersListPanel() {
         DefaultListModel<String> charactersListModel = new DefaultListModel<>();
-        // Aquí podrías cargar los personajes de alguna manera
+        // You can load characters here in some way
         return new JList<>(charactersListModel);
     }
 }
