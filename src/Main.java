@@ -2,17 +2,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Main {
-
+public class Main extends JFrame{
     private static Map<String, String[]> usersMap;
 
     public static void main(String[] args) {
+        Conexion conexion = new Conexion("videojuegosdb");
+        Connection conn = conexion.conectar();
+
         usersMap = loadUsersFromFile("users.txt");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
@@ -73,6 +78,8 @@ public class Main {
         centerPanel.add(createCharacterPanel("Coming Soon", "Exciting things coming", "./photos/new.jfif"));
 
         mainContainer.add(centerPanel, BorderLayout.CENTER);
+
+
 
         frame.setVisible(true);
     }
