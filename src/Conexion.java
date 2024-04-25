@@ -11,18 +11,17 @@ public class Conexion {
 
     public Conexion(String nombrebd){
         this.nombrebd=nombrebd;
-        this.url = "jdbc:oracle:thin:@172.16.7.11:1521/orclcdb/" + nombrebd;
+        this.url = "jdbc:oracle:thin:@172.16.7.11:1521:ORCLCDB";
     }
 
     public Connection conectar(){
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             connection = DriverManager.getConnection(url,usuario,password);
-            System.out.println("Connected to the DB successfully!");
+            System.out.println("Connected successfully!");
         }
         catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e);
-            System.out.println("Failed connecting to : " + nombrebd + "!");
+            e.printStackTrace();
         }
         return connection;
     }
