@@ -9,17 +9,16 @@ import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main extends JFrame{
-    private static Map<String, String[]> usersMap;
 
     private static Connection conn;
 
     public static void main(String[] args) {
-        usersMap = loadUsersFromFile("users.txt");
-
         SwingUtilities.invokeLater(() -> createAndShowGUI());
+
     }
 
     private static void createAndShowGUI() {
@@ -183,28 +182,33 @@ public class Main extends JFrame{
 
     // Method to authenticate the user
     private static int authenticateUser(String username, String password) {
+        Map<String, String> usersMap = loadUsersFromFile();
         if (usersMap.containsKey(username)) {
-            String[] userData = usersMap.get(username);
-            if (userData[0].equals(password)) {
-                return Integer.parseInt(userData[1]);
+            String userData = usersMap.get(username);
+            if (userData.equals(password)) {
+                return 0;
+            }
+        } else {
+            if (Objects.equals(username.toLowerCase(), "admin") && Objects.equals(password.toLowerCase(), "admin")) {
+                return 1;
             }
         }
         return -1;
     }
 
     // Method to load users from file
-    private static Map<String, String[]> loadUsersFromFile(String filename) {
-        Map<String, String[]> users = new HashMap<>();
+    private static Map<String, String> loadUsersFromFile() {
+        Map<String, String> users = new HashMap<>();
         try {
-            File file = new File(filename);
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String[] data = scanner.nextLine().split(" ");
-                users.put(data[0], new String[]{data[1], data[2]});
+            String userQuery = "SELECT NOMBRE,CLAVE FROM JUGADOR";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(userQuery);
+
+            while (rs.next()) {
+                users.put(rs.getString("NOMBRE"), rs.getString("CLAVE"));
             }
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + filename);
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return users;
@@ -311,16 +315,18 @@ public class Main extends JFrame{
 
         panel.add(centerPanel, BorderLayout.CENTER);
 
-        userList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    JList<String> list = (JList<String>) e.getSource();
-                    String playerName = list.getSelectedValue();
-                    createCharactersListPanel(charactersList,playerName);
+        if (userList != null) {
+            userList.addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if (!e.getValueIsAdjusting()) {
+                        JList<String> list = (JList<String>) e.getSource();
+                        String playerName = list.getSelectedValue();
+                        createCharactersListPanel(charactersList,playerName);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         return panel;
     }
