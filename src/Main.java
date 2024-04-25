@@ -1,12 +1,12 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -14,10 +14,9 @@ import java.util.Scanner;
 public class Main extends JFrame{
     private static Map<String, String[]> usersMap;
 
-    public static void main(String[] args) {
-        Conexion conexion = new Conexion("videojuegosdb");
-        Connection conn = conexion.conectar();
+    private static Connection conn;
 
+    public static void main(String[] args) {
         usersMap = loadUsersFromFile("users.txt");
 
         SwingUtilities.invokeLater(() -> createAndShowGUI());
@@ -27,7 +26,8 @@ public class Main extends JFrame{
         JFrame frame = new JFrame("Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
-
+        Conexion conexion = new Conexion("videojuegosdb");
+        conn = conexion.conectar();
         // Main container with BorderLayout
         Container mainContainer = frame.getContentPane();
         mainContainer.setLayout(new BorderLayout());
@@ -299,9 +299,11 @@ public class Main extends JFrame{
         JList<String> userList = createUserListPanel();
         centerPanel.add(new JScrollPane(userList));
 
+
         // Panel for character list on the top right
-        JList<String> charactersList = createCharactersListPanel();
+        JList<String> charactersList = new JList<>();
         centerPanel.add(new JScrollPane(charactersList));
+
 
         // Panel for possible changes on the bottom right
         // You should implement or remove this panel based on your needs
@@ -309,22 +311,62 @@ public class Main extends JFrame{
 
         panel.add(centerPanel, BorderLayout.CENTER);
 
+        userList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    JList<String> list = (JList<String>) e.getSource();
+                    String playerName = list.getSelectedValue();
+                    createCharactersListPanel(charactersList,playerName);
+                }
+            }
+        });
+
         return panel;
     }
 
     // Method to create a JList containing the list of users
     private static JList<String> createUserListPanel() {
-        DefaultListModel<String> userListModel = new DefaultListModel<>();
-        for (String user : usersMap.keySet()) {
-            userListModel.addElement(user);
+        try {
+            String userQuery = "SELECT NOMBRE FROM JUGADOR";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(userQuery);
+
+            if(rs.next()){
+                DefaultListModel<String> userListModel = new DefaultListModel<>();
+                while(rs.next()){
+                    userListModel.addElement(rs.getString("NOMBRE"));
+                }
+                return new JList<>(userListModel);
+            }
+            st.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("An error was found while loading the users");
         }
-        return new JList<>(userListModel);
+        return null;
     }
 
     // Method to create a JList containing the list of characters
-    private static JList<String> createCharactersListPanel() {
-        DefaultListModel<String> charactersListModel = new DefaultListModel<>();
-        // You can load characters here in some way
-        return new JList<>(charactersListModel);
+    private static void createCharactersListPanel(JList<String> list, String playerName) {
+        try {
+            String charactersQuery = "SELECT P.NOMBRE FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?";
+            PreparedStatement ps = conn.prepareStatement(charactersQuery);
+            ps.setString(1,playerName);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                DefaultListModel<String> charactersListModel = new DefaultListModel<>();
+                list.setModel(charactersListModel);
+                do {
+                    charactersListModel.addElement(rs.getString("NOMBRE"));
+                } while(rs.next());
+            }
+
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("An error was found while loading the users");
+        }
     }
 }
