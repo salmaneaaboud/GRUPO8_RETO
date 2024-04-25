@@ -11,7 +11,7 @@ public class Conexion {
 
     public Conexion(String nombrebd){
         this.nombrebd=nombrebd;
-        this.url = "jdbc:oracle:thin:@172.16.7.11:1521/" + nombrebd;
+        this.url = "jdbc:oracle:thin:@172.16.7.11:1521/orclcdb/" + nombrebd;
     }
 
     public Connection conectar(){
@@ -22,7 +22,7 @@ public class Conexion {
         }
         catch (SQLException | ClassNotFoundException e) {
             System.out.println(e);
-            System.out.println("¡Error al conectarse a la BD: " + nombrebd + "!");
+            System.out.println("Failed connecting to : " + nombrebd + "!");
         }
         return connection;
     }
