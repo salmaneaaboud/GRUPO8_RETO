@@ -338,15 +338,13 @@ public class Main extends JFrame{
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(userQuery);
 
-            if(rs.next()){
-                DefaultListModel<String> userListModel = new DefaultListModel<>();
-                while(rs.next()){
-                    userListModel.addElement(rs.getString("NOMBRE"));
-                }
-                return new JList<>(userListModel);
+            DefaultListModel<String> userListModel = new DefaultListModel<>();
+            while(rs.next()){
+                userListModel.addElement(rs.getString("NOMBRE"));
             }
-            st.close();
-            rs.close();
+            return new JList<>(userListModel);
+
+
         } catch (SQLException e) {
             System.out.println("An error was found while loading the users");
         }
