@@ -4,21 +4,17 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
 
-public class Main extends JFrame{
+public class Main extends JFrame {
 
     private static Connection conn;
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
-
+        SwingUtilities.invokeLater(Main::createAndShowGUI);
     }
 
     private static void createAndShowGUI() {
@@ -47,13 +43,7 @@ public class Main extends JFrame{
         JButton loginButton = new JButton("Log in");
 
         // Adding ActionListener for the log in button
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Show login form
-                showLoginForm(frame);
-            }
-        });
+        loginButton.addActionListener(e -> showLoginForm(frame));
 
         southPanel.add(loginButton);
         southPanel.setPreferredSize(new Dimension(0, 50));
@@ -78,8 +68,6 @@ public class Main extends JFrame{
 
         mainContainer.add(centerPanel, BorderLayout.CENTER);
 
-
-
         frame.setVisible(true);
     }
 
@@ -97,6 +85,7 @@ public class Main extends JFrame{
                 Image newImg = img.getScaledInstance(icon.getIconWidth() + 50, icon.getIconHeight() + 50, java.awt.Image.SCALE_SMOOTH);
                 imageLabel.setIcon(new ImageIcon(newImg));
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 imageLabel.setIcon(icon);
             }
@@ -131,43 +120,43 @@ public class Main extends JFrame{
         JButton loginButton = new JButton("Log in");
         JButton cancelButton = new JButton("Cancel");
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = userText.getText();
-                char[] password = passwordText.getPassword();
-                String passwordString = new String(password);
-                int userType = authenticateUser(username, passwordString);
-                if (userType == 0) {
-                    // Log in as user
-                    loginFrame.dispose(); // Close login frame
-                    parentFrame.dispose(); // Close current frame
-                    JFrame userFrame = new JFrame("User"); // Create a new frame for the user
-                    userFrame.getContentPane().add(createUserPanel());
-                    userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    userFrame.setSize(1000, 600);
-                    userFrame.setVisible(true);
-                } else if (userType == 1) {
-                    // Log in as admin
-                    loginFrame.dispose(); // Close login frame
-                    parentFrame.dispose(); // Close current frame
-                    JFrame adminFrame = new JFrame("Admin"); // Create a new frame for the admin
-                    adminFrame.getContentPane().add(createAdminPanel());
-                    adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    adminFrame.setSize(1000, 600);
-                    adminFrame.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(loginFrame, "Incorrect username or password.");
-                }
-            }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        ActionListener loginAction = e -> {
+            String username = userText.getText();
+            char[] password = passwordText.getPassword();
+            String passwordString = new String(password);
+            int userType = authenticateUser(username, passwordString);
+            if (userType == 0) {
+                // Log in as user
                 loginFrame.dispose(); // Close login frame
+                parentFrame.dispose(); // Close current frame
+                JFrame userFrame = new JFrame("User"); // Create a new frame for the user
+                userFrame.getContentPane().add(createUserPanel());
+                userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                userFrame.setSize(1000, 600);
+                userFrame.setVisible(true);
+            } else if (userType == 1) {
+                // Log in as admin
+                loginFrame.dispose(); // Close login frame
+                parentFrame.dispose(); // Close current frame
+                JFrame adminFrame = new JFrame("Admin"); // Create a new frame for the admin
+                adminFrame.getContentPane().add(createAdminPanel());
+                adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                adminFrame.setSize(1000, 600);
+                adminFrame.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(loginFrame, "Incorrect username or password.");
             }
-        });
+        };
+
+        loginButton.addActionListener(loginAction);
+
+        ActionListener enterAction = e -> loginAction.actionPerformed(new ActionEvent(loginButton, ActionEvent.ACTION_PERFORMED, ""));
+
+        // Add ActionListener for Enter key press to both text fields
+        userText.addActionListener(enterAction);
+        passwordText.addActionListener(enterAction);
+
+        cancelButton.addActionListener(e -> loginFrame.dispose());
 
         panel.add(userLabel);
         panel.add(userText);
@@ -179,6 +168,7 @@ public class Main extends JFrame{
         loginFrame.add(panel);
         loginFrame.setVisible(true);
     }
+
 
     // Method to authenticate the user
     private static int authenticateUser(String username, String password) {
@@ -233,14 +223,11 @@ public class Main extends JFrame{
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
         JButton logoutButton = new JButton("Log out");
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Log out and restart the application
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-                topFrame.dispose(); // Close current frame
-                createAndShowGUI(); // Restart the application
-            }
+        logoutButton.addActionListener(e -> {
+            // Log out and restart the application
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+            topFrame.dispose(); // Close current frame
+            createAndShowGUI(); // Restart the application
         });
 
         southPanel.add(logoutButton);
@@ -281,14 +268,11 @@ public class Main extends JFrame{
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
         JButton logoutButton = new JButton("Log out");
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Log out and restart the application
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-                topFrame.dispose(); // Close current frame
-                createAndShowGUI(); // Restart the application
-            }
+        logoutButton.addActionListener(e -> {
+            // Log out and restart the application
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+            topFrame.dispose(); // Close current frame
+            createAndShowGUI(); // Restart the application
         });
 
         southPanel.add(logoutButton);
@@ -303,11 +287,9 @@ public class Main extends JFrame{
         JList<String> userList = createUserListPanel();
         centerPanel.add(new JScrollPane(userList));
 
-
         // Panel for character list on the top right
         JList<String> charactersList = new JList<>();
         centerPanel.add(new JScrollPane(charactersList));
-
 
         // Panel for possible changes on the bottom right
         // You should implement or remove this panel based on your needs
@@ -316,14 +298,11 @@ public class Main extends JFrame{
         panel.add(centerPanel, BorderLayout.CENTER);
 
         if (userList != null) {
-            userList.addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if (!e.getValueIsAdjusting()) {
-                        JList<String> list = (JList<String>) e.getSource();
-                        String playerName = list.getSelectedValue();
-                        createCharactersListPanel(charactersList,playerName);
-                    }
+            userList.addListSelectionListener(e -> {
+                if (!e.getValueIsAdjusting()) {
+                    JList<String> list = (JList<String>) e.getSource();
+                    String playerName = list.getSelectedValue();
+                    createCharactersListPanel(charactersList, playerName);
                 }
             });
         }
@@ -338,13 +317,15 @@ public class Main extends JFrame{
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(userQuery);
 
-            DefaultListModel<String> userListModel = new DefaultListModel<>();
-            while(rs.next()){
-                userListModel.addElement(rs.getString("NOMBRE"));
+            if (rs.next()) {
+                DefaultListModel<String> userListModel = new DefaultListModel<>();
+                do {
+                    userListModel.addElement(rs.getString("NOMBRE"));
+                } while (rs.next());
+                return new JList<>(userListModel);
             }
-            return new JList<>(userListModel);
-
-
+            st.close();
+            rs.close();
         } catch (SQLException e) {
             System.out.println("An error was found while loading the users");
         }
@@ -356,15 +337,15 @@ public class Main extends JFrame{
         try {
             String charactersQuery = "SELECT P.NOMBRE FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?";
             PreparedStatement ps = conn.prepareStatement(charactersQuery);
-            ps.setString(1,playerName);
+            ps.setString(1, playerName);
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 DefaultListModel<String> charactersListModel = new DefaultListModel<>();
                 list.setModel(charactersListModel);
                 do {
                     charactersListModel.addElement(rs.getString("NOMBRE"));
-                } while(rs.next());
+                } while (rs.next());
             }
 
             ps.close();
