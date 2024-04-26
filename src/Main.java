@@ -5,11 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Main extends JFrame {
+    private static String saveUsername;
 
     private static Connection conn;
 
@@ -126,6 +128,7 @@ public class Main extends JFrame {
             String passwordString = new String(password);
             int userType = authenticateUser(username, passwordString);
             if (userType == 0) {
+                saveUsername = username;
                 // Log in as user
                 loginFrame.dispose(); // Close login frame
                 parentFrame.dispose(); // Close current frame
@@ -240,15 +243,41 @@ public class Main extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
         // Creating custom panels to represent user's characters
-        centerPanel.add(createCharacterPanel("Chayane", "Summoner Level: 90", "./photos/summoner.jfif"));
-        centerPanel.add(createCharacterPanel("Gandalf", "Wizard Level: 45", "./photos/wizard.jfif"));
-        centerPanel.add(createCharacterPanel("Ibai", "Tank Level: 10", "./photos/tank.jfif"));
-        centerPanel.add(createCharacterPanel("Jesus", "Paladin Level: 33", "./photos/paladin.jfif"));
-        centerPanel.add(createCharacterPanel("Add New Character", "", "./photos/add.png"));
 
+        ArrayList<String[]> characters = usersCharactersList(saveUsername);
+
+        if (characters != null) {
+            for (String[] i : characters) {
+                centerPanel.add(createCharacterPanel(i[0], i[2]+" Level: "+i[1], i[3]));
+            }
+        }
         panel.add(centerPanel, BorderLayout.CENTER);
 
         return panel;
+    }
+
+    private static ArrayList<String[]> usersCharactersList (String username) {
+        try {
+            ArrayList<String[]> characters = new ArrayList<>();
+            PreparedStatement ps = conn.prepareStatement("SELECT P.NOMBRE,P.NIVEL,P.TIPO,P.IMAGEN FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?");
+            ps.setString(1,username);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String[] characterInfo = new String[4];
+                characterInfo[0] = rs.getString("NOMBRE");
+                characterInfo[1] = String.valueOf(rs.getInt("NIVEL"));
+                characterInfo[2] = rs.getString("TIPO");
+                characterInfo[3] = "./photos/"+rs.getString("IMAGEN");
+                System.out.println(characterInfo[3]);
+                characters.add(characterInfo);
+            }
+
+            return characters;
+        } catch (SQLException e) {
+            System.out.println("Error found while loading the characters!");
+        }
+        return null;
     }
 
     private static JPanel createAdminPanel() {
@@ -332,7 +361,7 @@ public class Main extends JFrame {
         return null;
     }
 
-    // Method to create a JList containing the list of characters
+    // Method to create a JList containing the list of characters from the database
     private static void createCharactersListPanel(JList<String> list, String playerName) {
         try {
             String charactersQuery = "SELECT P.NOMBRE FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?";
@@ -340,18 +369,17 @@ public class Main extends JFrame {
             ps.setString(1, playerName);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                DefaultListModel<String> charactersListModel = new DefaultListModel<>();
-                list.setModel(charactersListModel);
-                do {
-                    charactersListModel.addElement(rs.getString("NOMBRE"));
-                } while (rs.next());
+            DefaultListModel<String> charactersListModel = new DefaultListModel<>();
+            list.setModel(charactersListModel);
+
+            while (rs.next()) {
+                charactersListModel.addElement(rs.getString("NOMBRE"));
             }
 
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            System.out.println("An error was found while loading the users");
+            System.out.println("An error occurred while loading the characters: " + e.getMessage());
         }
     }
 }
