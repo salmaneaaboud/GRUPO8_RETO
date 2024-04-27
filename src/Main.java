@@ -269,7 +269,6 @@ public class Main extends JFrame {
                 characterInfo[1] = String.valueOf(rs.getInt("NIVEL"));
                 characterInfo[2] = rs.getString("TIPO");
                 characterInfo[3] = "./photos/"+rs.getString("IMAGEN");
-                System.out.println(characterInfo[3]);
                 characters.add(characterInfo);
             }
 
