@@ -253,6 +253,14 @@ public class Main extends JFrame {
         }
         panel.add(centerPanel, BorderLayout.CENTER);
 
+        JButton supportButton = new JButton("Support");
+        supportButton.addActionListener(e -> showSupportForm());
+        southPanel.add(supportButton);
+
+        southPanel.add(logoutButton);
+        southPanel.setPreferredSize(new Dimension(0, 50));
+        panel.add(southPanel, BorderLayout.SOUTH);
+
         return panel;
     }
 
@@ -289,7 +297,9 @@ public class Main extends JFrame {
         northPanel.add(new JButton("Guild Management"));
         northPanel.add(new JButton("Advanced Statistics"));
         northPanel.add(new JButton("System"));
-        northPanel.add(new JButton("Support"));
+        JButton supportButton = new JButton("Support");
+        supportButton.addActionListener(e -> showSupportMessages()); // Modified to display stored messages
+        northPanel.add(supportButton);
         panel.add(northPanel, BorderLayout.NORTH);
 
         // South Area with BoxLayout and height of 50
@@ -329,8 +339,8 @@ public class Main extends JFrame {
             userList.addListSelectionListener(e -> {
                 if (!e.getValueIsAdjusting()) {
                     JList<String> list = (JList<String>) e.getSource();
-                    String playerName = list.getSelectedValue();
-                    createCharactersListPanel(charactersList, playerName);
+                    String selectedUser = list.getSelectedValue();
+                    showUserMessages(selectedUser); // Shows the messages for the selected user
                 }
             });
         }
@@ -379,6 +389,115 @@ public class Main extends JFrame {
             rs.close();
         } catch (SQLException e) {
             System.out.println("An error occurred while loading the characters: " + e.getMessage());
+        }
+    }
+
+    private static void showSupportForm() {
+        JFrame supportFrame = new JFrame("Support");
+        supportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        supportFrame.setSize(400, 200);
+        supportFrame.setLocationRelativeTo(null); // Center on the screen
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JTextArea messageTextArea = new JTextArea();
+        JButton sendButton = new JButton("Send");
+        sendButton.addActionListener(e -> {
+            String message = messageTextArea.getText();
+            if (!message.isEmpty()) {
+                sendMessageToSupport(message);
+                JOptionPane.showMessageDialog(supportFrame, "Message sent successfully!");
+                supportFrame.dispose();
+            } else {
+                JOptionPane.showMessageDialog(supportFrame, "Please enter a message to send.");
+            }
+        });
+
+        panel.add(new JScrollPane(messageTextArea), BorderLayout.CENTER);
+        panel.add(sendButton, BorderLayout.SOUTH);
+
+        supportFrame.add(panel);
+        supportFrame.setVisible(true);
+    }
+
+
+    private static void sendMessageToSupport(String message) {
+        try {
+            String insertQuery = "INSERT INTO mensajes_soporte (IdJugador, mensaje) VALUES (?, ?)";
+            PreparedStatement ps = conn.prepareStatement(insertQuery);
+            ps.setInt(1, getUserIdByUsername(saveUsername));
+            ps.setString(2, message);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+        }
+    }
+
+    private static int getUserIdByUsername(String username) {
+        try {
+            String userQuery = "SELECT IdJugador FROM JUGADOR WHERE NOMBRE = ?";
+            PreparedStatement ps = conn.prepareStatement(userQuery);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("IdJugador");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while fetching user ID: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    private static void showUserMessages(String username) {
+        try {
+            String query = "SELECT mensaje FROM mensajes_soporte WHERE IdJugador = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, getUserIdByUsername(username));
+            ResultSet rs = ps.executeQuery();
+
+            StringBuilder messageBuilder = new StringBuilder();
+            while (rs.next()) {
+                messageBuilder.append(rs.getString("mensaje")).append("\n");
+            }
+
+            JOptionPane.showMessageDialog(null, messageBuilder.toString(), "Messages for " + username, JOptionPane.INFORMATION_MESSAGE);
+
+            ps.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("An error occurred while fetching user messages: " + e.getMessage());
+        }
+    }
+
+    private static void showSupportMessages() {
+        JFrame supportMessagesFrame = new JFrame("Support Messages");
+        supportMessagesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        supportMessagesFrame.setSize(600, 400);
+        supportMessagesFrame.setLocationRelativeTo(null); // Center on the screen
+
+        JTextArea messagesTextArea = new JTextArea();
+        messagesTextArea.setEditable(false); // Make the text area read-only
+
+        JScrollPane scrollPane = new JScrollPane(messagesTextArea);
+
+        supportMessagesFrame.add(scrollPane);
+        supportMessagesFrame.setVisible(true);
+
+        // Query stored messages and display them in the JTextArea
+        StringBuilder messages = new StringBuilder();
+        try {
+            String query = "SELECT * FROM mensajes_soporte";
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                messages.append("User: ").append(resultSet.getString("IdJugador")).append("\n");
+                messages.append("Message: ").append(resultSet.getString("mensaje")).append("\n");
+                messages.append("Date: ").append(resultSet.getString("fecha")).append("\n\n");
+            }
+            messagesTextArea.setText(messages.toString());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
