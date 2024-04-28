@@ -23,13 +23,13 @@ public class UserWindow extends JFrame {
         // North Area with FlowLayout
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
-        northPanel.add(createButtonWithListener("Characters", null)); // Example action
+        northPanel.add(createButtonWithListener("Characters", null));
         northPanel.add(createButtonWithListener("Messages", e -> Main.showUserMessages(saveUsername))); // It calls the Main showUserMessages with the logged username
-        northPanel.add(createButtonWithListener("Ranking", null)); // Example action
-        northPanel.add(createButtonWithListener("Missions", null)); // Example action
-        northPanel.add(createButtonWithListener("Regions", null)); // Example action
-        northPanel.add(createButtonWithListener("Guild", null)); // Example action
-        northPanel.add(createButtonWithListener("News", null)); // Example action
+        northPanel.add(createButtonWithListener("Ranking", null));
+        northPanel.add(createButtonWithListener("Missions", null));
+        northPanel.add(createButtonWithListener("Regions", null));
+        northPanel.add(createButtonWithListener("Guild", null));
+        northPanel.add(createButtonWithListener("News", null));
         panel.add(northPanel, BorderLayout.NORTH);
 
         // South Area with BoxLayout and height of 50
