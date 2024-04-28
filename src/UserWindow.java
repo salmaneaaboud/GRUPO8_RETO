@@ -24,7 +24,7 @@ public class UserWindow extends JFrame {
         northPanel.setLayout(new FlowLayout());
         northPanel.add(new JButton("Characters"));
         JButton messagesButton = new JButton("Messages");
-        messagesButton.addActionListener(e -> Main.showUserMessages(saveUsername)); // Llama a showUserMessages con el nombre de usuario actual
+        messagesButton.addActionListener(e -> Main.showUserMessages(saveUsername)); // It calls the Main showUserMessages with the logged username
         northPanel.add(messagesButton);
         northPanel.add(new JButton("Ranking"));
         northPanel.add(new JButton("Missions"));
