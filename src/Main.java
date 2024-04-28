@@ -340,7 +340,7 @@ public class Main extends JFrame {
                 if (!e.getValueIsAdjusting()) {
                     JList<String> list = (JList<String>) e.getSource();
                     String selectedUser = list.getSelectedValue();
-                    showUserMessages(selectedUser); // Shows the messages for the selected user
+                    createCharactersListPanel(charactersList,selectedUser);
                 }
             });
         }
