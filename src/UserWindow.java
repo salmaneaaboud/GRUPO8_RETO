@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,8 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserWindow extends JFrame {
-    private Connection connection;
-    private String saveUsername;
+    private final Connection connection;
+    private final String saveUsername;
 
     public UserWindow(Connection connection, String saveUsername) {
         this.connection = connection;
@@ -22,15 +23,13 @@ public class UserWindow extends JFrame {
         // North Area with FlowLayout
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
-        northPanel.add(new JButton("Characters"));
-        JButton messagesButton = new JButton("Messages");
-        messagesButton.addActionListener(e -> Main.showUserMessages(saveUsername)); // It calls the Main showUserMessages with the logged username
-        northPanel.add(messagesButton);
-        northPanel.add(new JButton("Ranking"));
-        northPanel.add(new JButton("Missions"));
-        northPanel.add(new JButton("Regions"));
-        northPanel.add(new JButton("Guild"));
-        northPanel.add(new JButton("News"));
+        northPanel.add(createButtonWithListener("Characters", null));
+        northPanel.add(createButtonWithListener("Messages", e -> Main.showUserMessages(saveUsername))); // It calls the Main showUserMessages with the logged username
+        northPanel.add(createButtonWithListener("Ranking", null));
+        northPanel.add(createButtonWithListener("Missions", null));
+        northPanel.add(createButtonWithListener("Regions", null));
+        northPanel.add(createButtonWithListener("Guild", null));
+        northPanel.add(createButtonWithListener("News", null));
         panel.add(northPanel, BorderLayout.NORTH);
 
         // South Area with BoxLayout and height of 50
@@ -54,12 +53,10 @@ public class UserWindow extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
         // Creating custom panels to represent user's characters
-
         ArrayList<String[]> characters = usersCharactersList(saveUsername);
-
         if (characters != null) {
             for (String[] i : characters) {
-                centerPanel.add(Main.createCharacterPanel(i[0], i[2]+" Level: "+i[1], i[3]));
+                centerPanel.add(Main.createCharacterPanel(i[0], i[2] + " Level: " + i[1], i[3]));
             }
         }
         panel.add(centerPanel, BorderLayout.CENTER);
@@ -73,6 +70,16 @@ public class UserWindow extends JFrame {
         panel.add(southPanel, BorderLayout.SOUTH);
 
         return panel;
+    }
+
+    private JButton createButtonWithListener(String buttonText, ActionListener actionListener) {
+        JButton button = new JButton(buttonText);
+        if (actionListener != null) {
+            button.addActionListener(actionListener);
+        } else {
+            button.addActionListener(e -> JOptionPane.showMessageDialog(null, "Coming Soon"));
+        }
+        return button;
     }
 
     private ArrayList<String[]> usersCharactersList (String username) {
