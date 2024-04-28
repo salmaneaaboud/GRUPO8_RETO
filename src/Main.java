@@ -1,6 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +17,7 @@ public class Main extends JFrame {
         SwingUtilities.invokeLater(Main::createAndShowGUI);
     }
 
-    private static void createAndShowGUI() {
+    public static void createAndShowGUI() {
         JFrame frame = new JFrame("Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
@@ -74,7 +72,7 @@ public class Main extends JFrame {
     }
 
     // Method to create a custom panel to represent a character type
-    private static JPanel createCharacterPanel(String name, String description, String imagePath) {
+    public static JPanel createCharacterPanel(String name, String description, String imagePath) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
@@ -133,7 +131,8 @@ public class Main extends JFrame {
                 loginFrame.dispose(); // Close login frame
                 parentFrame.dispose(); // Close current frame
                 JFrame userFrame = new JFrame("User"); // Create a new frame for the user
-                userFrame.getContentPane().add(createUserPanel());
+                UserWindow userWindow = new UserWindow(conn,saveUsername);
+                userFrame.getContentPane().add(userWindow.createUserPanel());
                 userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 userFrame.setSize(1000, 600);
                 userFrame.setVisible(true);
@@ -142,7 +141,8 @@ public class Main extends JFrame {
                 loginFrame.dispose(); // Close login frame
                 parentFrame.dispose(); // Close current frame
                 JFrame adminFrame = new JFrame("Admin"); // Create a new frame for the admin
-                adminFrame.getContentPane().add(createAdminPanel());
+                AdminWindow adminWindow = new AdminWindow(conn);
+                adminFrame.getContentPane().add(adminWindow.createAdminPanel());
                 adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 adminFrame.setSize(1000, 600);
                 adminFrame.setVisible(true);
@@ -207,234 +207,7 @@ public class Main extends JFrame {
         return users;
     }
 
-    private static JPanel createUserPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-
-        // North Area with FlowLayout
-        JPanel northPanel = new JPanel();
-        northPanel.setLayout(new FlowLayout());
-        northPanel.add(new JButton("Characters"));
-        northPanel.add(new JButton("Messages"));
-        northPanel.add(new JButton("Ranking"));
-        northPanel.add(new JButton("Missions"));
-        northPanel.add(new JButton("Regions"));
-        northPanel.add(new JButton("Guild"));
-        northPanel.add(new JButton("News"));
-        panel.add(northPanel, BorderLayout.NORTH);
-
-        // South Area with BoxLayout and height of 50
-        JPanel southPanel = new JPanel();
-        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
-        JButton logoutButton = new JButton("Log out");
-        logoutButton.addActionListener(e -> {
-            // Log out and restart the application
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-            topFrame.dispose(); // Close current frame
-            createAndShowGUI(); // Restart the application
-        });
-
-        southPanel.add(logoutButton);
-        southPanel.setPreferredSize(new Dimension(0, 50));
-        panel.add(southPanel, BorderLayout.SOUTH);
-
-        // Center with GridLayout simulating a grid of characters
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(2, 5, 10, 10));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
-
-        // Creating custom panels to represent user's characters
-
-        ArrayList<String[]> characters = usersCharactersList(saveUsername);
-
-        if (characters != null) {
-            for (String[] i : characters) {
-                centerPanel.add(createCharacterPanel(i[0], i[2]+" Level: "+i[1], i[3]));
-            }
-        }
-        panel.add(centerPanel, BorderLayout.CENTER);
-
-        JButton supportButton = new JButton("Support");
-        supportButton.addActionListener(e -> showSupportForm());
-        southPanel.add(supportButton);
-
-        southPanel.add(logoutButton);
-        southPanel.setPreferredSize(new Dimension(0, 50));
-        panel.add(southPanel, BorderLayout.SOUTH);
-
-        return panel;
-    }
-
-    private static ArrayList<String[]> usersCharactersList (String username) {
-        try {
-            ArrayList<String[]> characters = new ArrayList<>();
-            PreparedStatement ps = conn.prepareStatement("SELECT P.NOMBRE,P.NIVEL,P.TIPO,P.IMAGEN FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?");
-            ps.setString(1,username);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String[] characterInfo = new String[4];
-                characterInfo[0] = rs.getString("NOMBRE");
-                characterInfo[1] = String.valueOf(rs.getInt("NIVEL"));
-                characterInfo[2] = rs.getString("TIPO");
-                characterInfo[3] = "./photos/"+rs.getString("IMAGEN");
-                characters.add(characterInfo);
-            }
-
-            return characters;
-        } catch (SQLException e) {
-            System.out.println("Error found while loading the characters!");
-        }
-        return null;
-    }
-
-    private static JPanel createAdminPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-
-        // North Area with FlowLayout
-        JPanel northPanel = new JPanel();
-        northPanel.setLayout(new FlowLayout());
-        northPanel.add(new JButton("User Management"));
-        northPanel.add(new JButton("Guild Management"));
-        northPanel.add(new JButton("Advanced Statistics"));
-        northPanel.add(new JButton("System"));
-        JButton supportButton = new JButton("Support");
-        supportButton.addActionListener(e -> showSupportMessages()); // Modified to display stored messages
-        northPanel.add(supportButton);
-        panel.add(northPanel, BorderLayout.NORTH);
-
-        // South Area with BoxLayout and height of 50
-        JPanel southPanel = new JPanel();
-        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
-        JButton logoutButton = new JButton("Log out");
-        logoutButton.addActionListener(e -> {
-            // Log out and restart the application
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-            topFrame.dispose(); // Close current frame
-            createAndShowGUI(); // Restart the application
-        });
-
-        southPanel.add(logoutButton);
-        southPanel.setPreferredSize(new Dimension(0, 50));
-        panel.add(southPanel, BorderLayout.SOUTH);
-
-        // Center with BoxLayout divided into three parts
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.LINE_AXIS));
-
-        // Panel for user list on the left
-        JList<String> userList = createUserListPanel();
-        centerPanel.add(new JScrollPane(userList));
-
-        // Panel for character list on the top right
-        JList<String> charactersList = new JList<>();
-        centerPanel.add(new JScrollPane(charactersList));
-
-        // Panel for possible changes on the bottom right
-        // You should implement or remove this panel based on your needs
-        // centerPanel.add(createChangesPanel());
-
-        panel.add(centerPanel, BorderLayout.CENTER);
-
-        if (userList != null) {
-            userList.addListSelectionListener(e -> {
-                if (!e.getValueIsAdjusting()) {
-                    JList<String> list = (JList<String>) e.getSource();
-                    String selectedUser = list.getSelectedValue();
-                    createCharactersListPanel(charactersList,selectedUser);
-                }
-            });
-        }
-
-        return panel;
-    }
-
-    // Method to create a JList containing the list of users
-    private static JList<String> createUserListPanel() {
-        try {
-            String userQuery = "SELECT NOMBRE FROM JUGADOR";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(userQuery);
-
-            if (rs.next()) {
-                DefaultListModel<String> userListModel = new DefaultListModel<>();
-                do {
-                    userListModel.addElement(rs.getString("NOMBRE"));
-                } while (rs.next());
-                return new JList<>(userListModel);
-            }
-            st.close();
-            rs.close();
-        } catch (SQLException e) {
-            System.out.println("An error was found while loading the users");
-        }
-        return null;
-    }
-
-    // Method to create a JList containing the list of characters from the database
-    private static void createCharactersListPanel(JList<String> list, String playerName) {
-        try {
-            String charactersQuery = "SELECT P.NOMBRE FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?";
-            PreparedStatement ps = conn.prepareStatement(charactersQuery);
-            ps.setString(1, playerName);
-            ResultSet rs = ps.executeQuery();
-
-            DefaultListModel<String> charactersListModel = new DefaultListModel<>();
-            list.setModel(charactersListModel);
-
-            while (rs.next()) {
-                charactersListModel.addElement(rs.getString("NOMBRE"));
-            }
-
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
-            System.out.println("An error occurred while loading the characters: " + e.getMessage());
-        }
-    }
-
-    private static void showSupportForm() {
-        JFrame supportFrame = new JFrame("Support");
-        supportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        supportFrame.setSize(400, 200);
-        supportFrame.setLocationRelativeTo(null); // Center on the screen
-
-        JPanel panel = new JPanel(new BorderLayout());
-
-        JTextArea messageTextArea = new JTextArea();
-        JButton sendButton = new JButton("Send");
-        sendButton.addActionListener(e -> {
-            String message = messageTextArea.getText();
-            if (!message.isEmpty()) {
-                sendMessageToSupport(message);
-                JOptionPane.showMessageDialog(supportFrame, "Message sent successfully!");
-                supportFrame.dispose();
-            } else {
-                JOptionPane.showMessageDialog(supportFrame, "Please enter a message to send.");
-            }
-        });
-
-        panel.add(new JScrollPane(messageTextArea), BorderLayout.CENTER);
-        panel.add(sendButton, BorderLayout.SOUTH);
-
-        supportFrame.add(panel);
-        supportFrame.setVisible(true);
-    }
-
-
-    private static void sendMessageToSupport(String message) {
-        try {
-            String insertQuery = "INSERT INTO mensajes_soporte (IdJugador, mensaje) VALUES (?, ?)";
-            PreparedStatement ps = conn.prepareStatement(insertQuery);
-            ps.setInt(1, getUserIdByUsername(saveUsername));
-            ps.setString(2, message);
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
-        }
-    }
-
-    private static int getUserIdByUsername(String username) {
+    public static int getUserIdByUsername(String username) {
         try {
             String userQuery = "SELECT IdJugador FROM JUGADOR WHERE NOMBRE = ?";
             PreparedStatement ps = conn.prepareStatement(userQuery);
@@ -449,7 +222,7 @@ public class Main extends JFrame {
         return -1;
     }
 
-    private static void showUserMessages(String username) {
+    public static void showUserMessages(String username) {
         try {
             String query = "SELECT mensaje FROM mensajes_soporte WHERE IdJugador = ?";
             PreparedStatement ps = conn.prepareStatement(query);
@@ -470,34 +243,5 @@ public class Main extends JFrame {
         }
     }
 
-    private static void showSupportMessages() {
-        JFrame supportMessagesFrame = new JFrame("Support Messages");
-        supportMessagesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        supportMessagesFrame.setSize(600, 400);
-        supportMessagesFrame.setLocationRelativeTo(null); // Center on the screen
 
-        JTextArea messagesTextArea = new JTextArea();
-        messagesTextArea.setEditable(false); // Make the text area read-only
-
-        JScrollPane scrollPane = new JScrollPane(messagesTextArea);
-
-        supportMessagesFrame.add(scrollPane);
-        supportMessagesFrame.setVisible(true);
-
-        // Query stored messages and display them in the JTextArea
-        StringBuilder messages = new StringBuilder();
-        try {
-            String query = "SELECT * FROM mensajes_soporte";
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                messages.append("User: ").append(resultSet.getString("IdJugador")).append("\n");
-                messages.append("Message: ").append(resultSet.getString("mensaje")).append("\n");
-                messages.append("Date: ").append(resultSet.getString("fecha")).append("\n\n");
-            }
-            messagesTextArea.setText(messages.toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
