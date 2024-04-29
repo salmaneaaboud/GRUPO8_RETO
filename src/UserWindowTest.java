@@ -1,8 +1,9 @@
-package test;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class AdminWindowTest {
+class UserWindowTest {
     private static Connection connection;
 
     @BeforeAll
@@ -38,12 +39,15 @@ class AdminWindowTest {
     }
 
     @Test
-    void testCreateAdminPanel() {
-        // Create an instance of AdminWindow with a connection
-        AdminWindow adminWindow = new AdminWindow(connection);
+    @DisplayName("New user panel")
+    @EnabledOnOs(OS.WINDOWS)
+    void testCreateUserPanel() {
+        // Create an instance of UserWindow with a connection and saveUsername
+        String saveUsername = "testUser";
+        UserWindow userWindow = new UserWindow(connection, saveUsername);
 
-        // Call createAdminPanel method and check if it returns a JPanel
-        JPanel adminPanel = adminWindow.createAdminPanel();
-        assertNotNull(adminPanel);
+        // Call createUserPanel method and check if it returns a JPanel
+        JPanel userPanel = userWindow.createUserPanel();
+        assertNotNull(userPanel);
     }
 }

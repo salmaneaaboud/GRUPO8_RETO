@@ -1,10 +1,13 @@
-package test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConexionTest {
     private Conexion conexion;
@@ -16,6 +19,8 @@ class ConexionTest {
     }
 
     @Test
+    @DisplayName("Connection")
+    @Tag("Controlador")
     void testConectar() throws SQLException {
         // Call conectar method and check if it returns a valid Connection object
         Connection connection = conexion.conectar();

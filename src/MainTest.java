@@ -1,7 +1,6 @@
-package test;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -39,12 +38,14 @@ class MainTest {
     }
 
     @Test
+    @DisplayName("Main panel test")
     void testCreateAndShowGUI() {
         // Call createAndShowGUI method and check if it executes without errors
         assertDoesNotThrow(() -> Main.createAndShowGUI());
     }
 
     @Test
+    @DisplayName("New character panel test")
     void testCreateCharacterPanel() {
         // Call createCharacterPanel method and check if it returns a JPanel
         JPanel characterPanel = Main.createCharacterPanel("Warrior", "Strong and resilient", "./photos/warrior.jfif");
@@ -52,6 +53,7 @@ class MainTest {
     }
 
     @Test
+    @DisplayName("Authentication for the user")
     void testAuthenticateUser() {
         // Test authentication with correct username and password
         assertEquals(0, Main.authenticateUser("testUser", "testPassword"));
@@ -60,6 +62,7 @@ class MainTest {
     }
 
     @Test
+    @DisplayName("List of users")
     void testLoadUsersFromFile() {
         // Test if loadUsersFromFile returns a non-empty map
         Map<String, String> usersMap = Main.loadUsersFromFile();

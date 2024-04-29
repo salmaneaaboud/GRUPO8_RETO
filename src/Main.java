@@ -174,7 +174,7 @@ public class Main extends JFrame {
 
 
     // Method to authenticate the user
-    private static int authenticateUser(String username, String password) {
+    static int authenticateUser(String username, String password) {
         Map<String, String> usersMap = loadUsersFromFile();
         if (usersMap.containsKey(username)) {
             String userData = usersMap.get(username);
@@ -190,7 +190,7 @@ public class Main extends JFrame {
     }
 
     // Method to load users from file
-    private static Map<String, String> loadUsersFromFile() {
+    static Map<String, String> loadUsersFromFile() {
         Map<String, String> users = new HashMap<>();
         try {
             String userQuery = "SELECT NOMBRE,CLAVE FROM JUGADOR";
