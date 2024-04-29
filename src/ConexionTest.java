@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -17,6 +18,7 @@ class ConexionTest {
     }
 
     @Test
+    @DisplayName("Connection")
     void testConectar() throws SQLException {
         // Call conectar method and check if it returns a valid Connection object
         Connection connection = conexion.conectar();

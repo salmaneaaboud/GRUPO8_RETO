@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -36,6 +37,7 @@ class AdminWindowTest {
     }
 
     @Test
+    @DisplayName("New admin panel")
     void testCreateAdminPanel() {
         // Create an instance of AdminWindow with a connection
         AdminWindow adminWindow = new AdminWindow(connection);
