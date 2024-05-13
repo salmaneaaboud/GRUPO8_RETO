@@ -1,3 +1,5 @@
+package Presentation;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
@@ -7,9 +9,13 @@ public class AdminWindow extends JFrame {
 
     public AdminWindow(Connection connection) {
         this.connection = connection;
+        createAdminPanel();
     }
 
-    public JPanel createAdminPanel() {
+    public void createAdminPanel() {
+        JFrame frame = new JFrame("Presentation.Main Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1000, 600);
         JPanel panel = new JPanel(new BorderLayout());
 
         // North Area with FlowLayout
@@ -67,8 +73,8 @@ public class AdminWindow extends JFrame {
             });
         }
 
-        return panel;
-
+        frame.getContentPane().add(panel);
+        frame.setVisible(true);
     }
 
     // Method to create a JList containing the list of users

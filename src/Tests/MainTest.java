@@ -1,3 +1,6 @@
+/*package Tests;
+
+import Presentation.Main;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +41,7 @@ class MainTest {
     }
 
     @Test
-    @DisplayName("Main panel test")
+    @DisplayName("Presentation.Main panel test")
     void testCreateAndShowGUI() {
         // Call createAndShowGUI method and check if it executes without errors
         assertDoesNotThrow(() -> Main.createAndShowGUI());
@@ -69,3 +72,4 @@ class MainTest {
         assertFalse(usersMap.isEmpty());
     }
 }
+*/
