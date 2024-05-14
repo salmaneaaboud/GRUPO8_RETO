@@ -26,10 +26,11 @@ public class UserDAO {
                 );
                 players.add(player);
             }
+            return players;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return players;
+        return null;
     }
 
     public static StringBuilder showUserMessages(Player player, Connection conn){

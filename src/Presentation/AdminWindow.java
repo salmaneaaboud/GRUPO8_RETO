@@ -28,7 +28,7 @@ public class AdminWindow extends JFrame {
         northPanel.add(new JButton("Advanced Statistics"));
         northPanel.add(new JButton("System"));
         JButton supportButton = new JButton("Support");
-        supportButton.addActionListener(e -> showSupportMessages()); // Modified to display stored messages
+        supportButton.addActionListener(e -> showSupportMessages());
         northPanel.add(supportButton);
         panel.add(northPanel, BorderLayout.NORTH);
 
@@ -58,10 +58,6 @@ public class AdminWindow extends JFrame {
         JList<String> charactersList = new JList<>();
         centerPanel.add(new JScrollPane(charactersList));
 
-        // Panel for possible changes on the bottom right
-        // You should implement or remove this panel based on your needs
-        // centerPanel.add(createChangesPanel());
-
         panel.add(centerPanel, BorderLayout.CENTER);
 
         if (userList != null) {
@@ -89,23 +85,12 @@ public class AdminWindow extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(messagesTextArea);
 
+        StringBuilder messages = adminQueries.loadUsersMessages(conn);
+        messagesTextArea.setText(messages.toString());
+
         supportMessagesFrame.add(scrollPane);
         supportMessagesFrame.setVisible(true);
 
-        // Query stored messages and display them in the JTextArea
-        StringBuilder messages = new StringBuilder();
-        try {
-            String query = "SELECT * FROM mensajes_soporte";
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                messages.append("User: ").append(resultSet.getString("IdJugador")).append("\n");
-                messages.append("Message: ").append(resultSet.getString("mensaje")).append("\n");
-                messages.append("Date: ").append(resultSet.getString("fecha")).append("\n\n");
-            }
-            messagesTextArea.setText(messages.toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
     }
 }
