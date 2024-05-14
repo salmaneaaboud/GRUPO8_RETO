@@ -7,7 +7,7 @@ import businessLogic.userQueries;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class databaseQueries {
 
@@ -51,7 +51,7 @@ public class databaseQueries {
             }
             return messages;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Cannot load user messages");
         }
         return null;
     }
@@ -76,7 +76,7 @@ public class databaseQueries {
             }
             return players;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Cannot load user messages");
         }
         return null;
     }
@@ -109,8 +109,7 @@ public class databaseQueries {
         try {
             String insertQuery = "INSERT INTO mensajes_soporte (IdJugador, mensaje) VALUES (?, ?)";
             PreparedStatement ps = conn.prepareStatement(insertQuery);
-            Optional<Player> user = userQueries.getUserByUsername(username,conn);
-            int userId = user.get().getPlayerId();
+            int userId = Objects.requireNonNull(userQueries.getUserByUsername(username, conn)).getPlayerId();
             if(userId!=0){
                 ps.setInt(1, userId);
                 ps.setString(2, message);

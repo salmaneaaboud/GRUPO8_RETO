@@ -7,17 +7,13 @@ import Persistance.databaseQueries;
 import javax.swing.*;
 import java.sql.Connection;
 import java.util.List;
-import java.util.Optional;
 
 public class userQueries {
 
     public static void showUserMessages(String username, Connection conn) {
-        Optional<Player> optionalPlayer = getUserByUsername(username,conn);
+        Player player = getUserByUsername(username,conn);
 
-
-        if (optionalPlayer.isPresent()) {
-            Player player = optionalPlayer.get();
-
+        if (player != null) {
             StringBuilder messageBuilder = databaseQueries.showUserMessages(player, conn);
 
             if (messageBuilder != null) {
@@ -29,16 +25,18 @@ public class userQueries {
         }
     }
 
-    public static Optional getUserByUsername(String username, Connection conn){
+    public static Player getUserByUsername(String username, Connection conn){
         List<Player> players = databaseQueries.loadPlayersFromDatabase(conn);
 
         if (players != null) {
-            return players.stream()
-                    .filter(player -> player.getName().equals(username))
-                    .findFirst();
+            for (Player player : players) {
+                if (player.getName().equals(username)){
+                    return player;
+                }
+            }
         }
 
-        return Optional.empty();
+        return null;
     }
 
     public static List<Character> usersCharacters (String username, Connection conn) {
