@@ -105,15 +105,14 @@ public class databaseQueries {
         return null;
     }
 
-    public static void insertUserMessage(String username, String message, Connection conn){
+    public static void insertUserMessage(int userId, String message, Connection conn){
         try {
             String insertQuery = "INSERT INTO mensajes_soporte (IdJugador, mensaje) VALUES (?, ?)";
             PreparedStatement ps = conn.prepareStatement(insertQuery);
-            int userId = Objects.requireNonNull(userQueries.getUserByUsername(username, conn)).getPlayerId();
-            if(userId!=0){
-                ps.setInt(1, userId);
-                ps.setString(2, message);
-            }
+
+            ps.setInt(1, userId);
+            ps.setString(2, message);
+
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {

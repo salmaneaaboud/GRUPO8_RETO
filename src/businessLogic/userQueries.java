@@ -44,6 +44,9 @@ public class userQueries {
     }
 
     public static void sendMessageToSupport(String message, String username, Connection conn) {
-        databaseQueries.insertUserMessage(message,username,conn);
+        Player player = getUserByUsername(username,conn);
+        if (player != null) {
+            databaseQueries.insertUserMessage(player.getPlayerId(),message,conn);
+        }
     }
 }
