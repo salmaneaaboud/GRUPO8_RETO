@@ -37,10 +37,15 @@ public class userQueries {
                     .filter(player -> player.getName().equals(username))
                     .findFirst();
         }
+
         return Optional.empty();
     }
 
     public static List<Character> usersCharacters (String username, Connection conn) {
         return databaseQueries.getCharactersByPlayerName(username,conn);
+    }
+
+    public static void sendMessageToSupport(String message, String username, Connection conn) {
+        databaseQueries.insertUserMessage(message,username,conn);
     }
 }

@@ -2,10 +2,12 @@ package Persistance;
 
 import Domain.Character;
 import Domain.Player;
+import businessLogic.userQueries;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class databaseQueries {
 
@@ -101,5 +103,22 @@ public class databaseQueries {
         }
 
         return null;
+    }
+
+    public static void insertUserMessage(String username, String message, Connection conn){
+        try {
+            String insertQuery = "INSERT INTO mensajes_soporte (IdJugador, mensaje) VALUES (?, ?)";
+            PreparedStatement ps = conn.prepareStatement(insertQuery);
+            Optional<Player> user = userQueries.getUserByUsername(username,conn);
+            int userId = user.get().getPlayerId();
+            if(userId!=0){
+                ps.setInt(1, userId);
+                ps.setString(2, message);
+            }
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+        }
     }
 }

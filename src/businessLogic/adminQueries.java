@@ -23,21 +23,19 @@ public class adminQueries {
         return null;
     }
 
-    // Method to create a JList containing the list of characters from the database
     public static void createCharactersListPanel(JList<String> list, String playerName, Connection conn) {
         DefaultListModel<String> charactersListModel = new DefaultListModel<>();
         list.setModel(charactersListModel);
         List<Character> characters = databaseQueries.getCharactersByPlayerName(playerName,conn);
 
-        for (Character character : characters) {
-            charactersListModel.addElement(character.getName());
+        if (characters != null) {
+            for (Character character : characters) {
+                charactersListModel.addElement(character.getName());
+            }
         }
     }
 
     public static StringBuilder loadUsersMessages(Connection conn) {
-        // Query stored messages and display them in the JTextArea
-        StringBuilder messages = databaseQueries.getUserMessages(conn);
-
-        return messages;
+        return databaseQueries.getUserMessages(conn);
     }
 }

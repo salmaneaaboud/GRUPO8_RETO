@@ -1,16 +1,12 @@
 package Presentation;
 
 import Domain.Character;
-import Domain.Player;
 import businessLogic.userQueries;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class UserWindow extends JFrame {
     private final Connection conn;
@@ -104,7 +100,7 @@ public class UserWindow extends JFrame {
         sendButton.addActionListener(e -> {
             String message = messageTextArea.getText();
             if (!message.isEmpty()) {
-                sendMessageToSupport(message);
+                userQueries.sendMessageToSupport(message,saveUsername,conn);
                 JOptionPane.showMessageDialog(supportFrame, "Message sent successfully!");
                 supportFrame.dispose();
             } else {
@@ -119,18 +115,5 @@ public class UserWindow extends JFrame {
         supportFrame.setVisible(true);
     }
 
-    private void sendMessageToSupport(String message) {
-        try {
-            String insertQuery = "INSERT INTO mensajes_soporte (IdJugador, mensaje) VALUES (?, ?)";
-            PreparedStatement ps = conn.prepareStatement(insertQuery);
-            Optional<Player> user = userQueries.getUserByUsername(saveUsername,conn);
-            int userId = user.get().getPlayerId();
-            ps.setInt(1, userId);
-            ps.setString(2, message);
-            ps.executeUpdate();
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
-        }
-    }
+
 }
