@@ -1,19 +1,16 @@
 package Presentation;
 
+import Domain.Character;
 import Domain.Player;
-import Persistance.UserDAO;
 import businessLogic.userQueries;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-
-import static businessLogic.userQueries.getUserByUsername;
 
 public class UserWindow extends JFrame {
     private final Connection conn;
@@ -34,7 +31,7 @@ public class UserWindow extends JFrame {
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
         northPanel.add(createButtonWithListener("Characters", null));
-        northPanel.add(createButtonWithListener("Messages", e -> userQueries.showUserMessages(saveUsername,conn))); // It calls the Presentation.Main showUserMessages with the logged username
+        northPanel.add(createButtonWithListener("Messages", e -> userQueries.showUserMessages(saveUsername,conn)));
         northPanel.add(createButtonWithListener("Ranking", null));
         northPanel.add(createButtonWithListener("Missions", null));
         northPanel.add(createButtonWithListener("Regions", null));
@@ -63,10 +60,10 @@ public class UserWindow extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
         // Creating custom panels to represent user's characters
-        ArrayList<String[]> characters = usersCharactersList(saveUsername);
+        List<Character> characters = userQueries.usersCharacters(saveUsername,conn);
         if (characters != null) {
-            for (String[] i : characters) {
-                centerPanel.add(Main.createCharacterPanel(i[0], i[2] + " Level: " + i[1], i[3]));
+            for (Character i : characters) {
+                centerPanel.add(Main.createCharacterPanel(i.getName(), i.getType() + " Level: " + i.getLevel(), i.getImage()));
             }
         }
         panel.add(centerPanel, BorderLayout.CENTER);
@@ -92,29 +89,6 @@ public class UserWindow extends JFrame {
             button.addActionListener(e -> JOptionPane.showMessageDialog(null, "Coming Soon"));
         }
         return button;
-    }
-
-    private ArrayList<String[]> usersCharactersList (String username) {
-        try {
-            ArrayList<String[]> characters = new ArrayList<>();
-            PreparedStatement ps = conn.prepareStatement("SELECT P.NOMBRE,P.NIVEL,P.TIPO,P.IMAGEN FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?");
-            ps.setString(1,username);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String[] characterInfo = new String[4];
-                characterInfo[0] = rs.getString("NOMBRE");
-                characterInfo[1] = String.valueOf(rs.getInt("NIVEL"));
-                characterInfo[2] = rs.getString("TIPO");
-                characterInfo[3] = "./photos/"+rs.getString("IMAGEN");
-                characters.add(characterInfo);
-            }
-
-            return characters;
-        } catch (SQLException e) {
-            System.out.println("Error found while loading the characters!");
-        }
-        return null;
     }
 
     private void showSupportForm() {

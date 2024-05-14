@@ -3,7 +3,7 @@ package businessLogic;
 import Presentation.AdminWindow;
 import Presentation.UserWindow;
 import Domain.Player;
-import Persistance.UserDAO;
+import Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ public class Authenticator {
     private static String saveUsername;
 
     public static int authenticateUser(String username, String password, Connection conn) {
-        List<Player> players = UserDAO.loadPlayersFromDatabase(conn);
+        List<Player> players = databaseQueries.loadPlayersFromDatabase(conn);
 
         for (Player player : players) {
             if (player.getName().equals(username) && player.getPassword().equals(password)) {
