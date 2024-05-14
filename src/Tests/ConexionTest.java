@@ -1,3 +1,6 @@
+package Tests;
+
+import Persistance.Conexion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -14,8 +17,8 @@ class ConexionTest {
 
     @BeforeEach
     void setUp() {
-        // Set up Conexion instance for each test
-        conexion = new Conexion("videojuegosdb");
+        // Set up dataAccess.Conexion instance for each test
+        conexion = new Conexion();
     }
 
     @Test

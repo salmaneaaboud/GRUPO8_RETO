@@ -1,15 +1,23 @@
+package Presentation;
+
+import businessLogic.adminQueries;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 
 public class AdminWindow extends JFrame {
-    private final Connection connection;
+    private final Connection conn;
 
     public AdminWindow(Connection connection) {
-        this.connection = connection;
+        this.conn = connection;
+        createAdminPanel();
     }
 
-    public JPanel createAdminPanel() {
+    public void createAdminPanel() {
+        JFrame frame = new JFrame("Presentation.Main Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1000, 600);
         JPanel panel = new JPanel(new BorderLayout());
 
         // North Area with FlowLayout
@@ -44,10 +52,9 @@ public class AdminWindow extends JFrame {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.LINE_AXIS));
 
         // Panel for user list on the left
-        JList<String> userList = createUserListPanel();
+        JList<String> userList = adminQueries.createUserListPanel(conn);
         centerPanel.add(new JScrollPane(userList));
 
-        // Panel for character list on the top right
         JList<String> charactersList = new JList<>();
         centerPanel.add(new JScrollPane(charactersList));
 
@@ -60,59 +67,15 @@ public class AdminWindow extends JFrame {
         if (userList != null) {
             userList.addListSelectionListener(e -> {
                 if (!e.getValueIsAdjusting()) {
-                    JList<String> list = (JList<String>) e.getSource();
-                    String selectedUser = list.getSelectedValue();
-                    createCharactersListPanel(charactersList,selectedUser);
+                    String selectedUser = userList.getSelectedValue();
+                    // Panel for character list on the top right
+                    adminQueries.createCharactersListPanel(charactersList,selectedUser,conn);
                 }
             });
         }
 
-        return panel;
-
-    }
-
-    // Method to create a JList containing the list of users
-    private JList<String> createUserListPanel() {
-        try {
-            String userQuery = "SELECT NOMBRE FROM JUGADOR";
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(userQuery);
-
-            if (rs.next()) {
-                DefaultListModel<String> userListModel = new DefaultListModel<>();
-                do {
-                    userListModel.addElement(rs.getString("NOMBRE"));
-                } while (rs.next());
-                return new JList<>(userListModel);
-            }
-            st.close();
-            rs.close();
-        } catch (SQLException e) {
-            System.out.println("An error was found while loading the users");
-        }
-        return null;
-    }
-
-    // Method to create a JList containing the list of characters from the database
-    private void createCharactersListPanel(JList<String> list, String playerName) {
-        try {
-            String charactersQuery = "SELECT P.NOMBRE FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?";
-            PreparedStatement ps = connection.prepareStatement(charactersQuery);
-            ps.setString(1, playerName);
-            ResultSet rs = ps.executeQuery();
-
-            DefaultListModel<String> charactersListModel = new DefaultListModel<>();
-            list.setModel(charactersListModel);
-
-            while (rs.next()) {
-                charactersListModel.addElement(rs.getString("NOMBRE"));
-            }
-
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
-            System.out.println("An error occurred while loading the characters: " + e.getMessage());
-        }
+        frame.getContentPane().add(panel);
+        frame.setVisible(true);
     }
 
     private void showSupportMessages() {
@@ -133,7 +96,7 @@ public class AdminWindow extends JFrame {
         StringBuilder messages = new StringBuilder();
         try {
             String query = "SELECT * FROM mensajes_soporte";
-            Statement statement = connection.createStatement();
+            Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 messages.append("User: ").append(resultSet.getString("IdJugador")).append("\n");

@@ -18,12 +18,12 @@ public class Main extends JFrame {
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Main Application");
+        JFrame frame = new JFrame("Presentation.Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         Conexion conexion = new Conexion("videojuegosdb");
         conn = conexion.conectar();
-        // Main container with BorderLayout
+        // Presentation.Main container with BorderLayout
         Container mainContainer = frame.getContentPane();
         mainContainer.setLayout(new BorderLayout());
 
