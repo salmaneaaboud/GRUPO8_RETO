@@ -3,7 +3,7 @@ package businessLogic;
 import Presentation.AdminWindow;
 import Presentation.UserWindow;
 import Domain.Player;
-import Persistance.UserDAO;
+import Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ public class Authenticator {
     private static String saveUsername;
 
     public static int authenticateUser(String username, String password, Connection conn) {
-        List<Player> players = UserDAO.loadPlayersFromDatabase(conn);
+        List<Player> players = databaseQueries.loadPlayersFromDatabase(conn);
 
         for (Player player : players) {
             if (player.getName().equals(username) && player.getPassword().equals(password)) {
@@ -53,14 +53,12 @@ public class Authenticator {
             String passwordString = new String(password);
             int userType = authenticateUser(username, passwordString, conn);
             if (userType == 1) {
-                // Log in as user
-                loginFrame.dispose(); // Close login frame
-                parentFrame.dispose(); // Close current frame
+                loginFrame.dispose();
+                parentFrame.dispose();
                 new AdminWindow(conn);
             } else if (userType == 0) {
-                // Log in as admin
-                loginFrame.dispose(); // Close login frame
-                parentFrame.dispose(); // Close current frame
+                loginFrame.dispose();
+                parentFrame.dispose();
                 new UserWindow(conn, saveUsername);
             } else {
                 JOptionPane.showMessageDialog(loginFrame, "Incorrect username or password.");
@@ -71,7 +69,6 @@ public class Authenticator {
 
         ActionListener enterAction = e -> loginAction.actionPerformed(new ActionEvent(loginButton, ActionEvent.ACTION_PERFORMED, ""));
 
-        // Add ActionListener for Enter key press to both text fields
         userText.addActionListener(enterAction);
         passwordText.addActionListener(enterAction);
 

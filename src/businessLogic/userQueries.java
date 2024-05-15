@@ -1,26 +1,20 @@
 package businessLogic;
 
+import Domain.Character;
 import Domain.Player;
-import Persistance.UserDAO;
+import Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class userQueries {
 
     public static void showUserMessages(String username, Connection conn) {
-        Optional<Player> optionalPlayer = getUserByUsername(username,conn);
+        Player player = getUserByUsername(username,conn);
 
-
-        if (optionalPlayer.isPresent()) {
-            Player player = optionalPlayer.get();
-
-            StringBuilder messageBuilder = UserDAO.showUserMessages(player, conn);
+        if (player != null) {
+            StringBuilder messageBuilder = databaseQueries.showUserMessages(player, conn);
 
             if (messageBuilder != null) {
                 JOptionPane.showMessageDialog(null, messageBuilder.toString(), "Messages for " + username, JOptionPane.INFORMATION_MESSAGE);
@@ -31,11 +25,28 @@ public class userQueries {
         }
     }
 
-    public static Optional getUserByUsername(String username, Connection conn){
-        List<Player> players = UserDAO.loadPlayersFromDatabase(conn);
+    public static Player getUserByUsername(String username, Connection conn){
+        List<Player> players = databaseQueries.loadPlayersFromDatabase(conn);
 
-        return players.stream()
-                .filter(player -> player.getName().equals(username))
-                .findFirst();
+        if (players != null) {
+            for (Player player : players) {
+                if (player.getName().equals(username)){
+                    return player;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static List<Character> usersCharacters (String username, Connection conn) {
+        return databaseQueries.getCharactersByPlayerName(username,conn);
+    }
+
+    public static void sendMessageToSupport(String message, String username, Connection conn) {
+        Player player = getUserByUsername(username,conn);
+        if (player != null) {
+            databaseQueries.insertUserMessage(player.getPlayerId(),message,conn);
+        }
     }
 }
