@@ -57,6 +57,14 @@ public class databaseQueriesTests {
 
     @Test
     @Order(3)
+    void testGetUserMessages() {
+        databaseQueries.insertUserMessage(1, "Test message", conn);
+        StringBuilder messages = databaseQueries.getUserMessages(conn);
+        assertNotNull(messages,"Messages Stringbuilder should not be null");
+    }
+
+    @Test
+    @Order(4)
     void testInsertUserMessage() {
         databaseQueries.insertUserMessage(1, "Test message", conn);
 
@@ -66,7 +74,7 @@ public class databaseQueriesTests {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void testShowUserMessages() {
         Player player = new Player(1, "Novato", 1, "Player1", "pass1", "player1@example.com");
 
@@ -76,4 +84,5 @@ public class databaseQueriesTests {
         assertNotNull(messages, "Messages should not be null.");
         assertTrue(messages.toString().contains("Test message"), "Messages should contain the test message.");
     }
+
 }
