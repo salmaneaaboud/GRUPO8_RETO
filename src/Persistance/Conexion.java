@@ -11,7 +11,7 @@ public class Conexion {
     String url;
 
     public Conexion(){
-        this.url = "jdbc:oracle:thin:@10.14.4.138:1521:orcl";
+        this.url = "jdbc:oracle:thin:@10.14.4.139:1521:orclcdb";
     }
 
     public Connection conectar(){

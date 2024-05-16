@@ -1,13 +1,12 @@
 package Persistance;
 
 import Domain.Character;
+import Domain.Guild;
 import Domain.Player;
-import businessLogic.userQueries;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class databaseQueries {
 
@@ -118,5 +117,25 @@ public class databaseQueries {
         } catch (SQLException e) {
             System.out.println("An error occurred while sending the message to support: " + e.getMessage());
         }
+    }
+
+    public static Guild getUsersGuild(int userId, Connection conn){
+        try {
+            String guildQuery = "SELECT * FROM GREMIO G INNER JOIN JUGADOR J ON G.IDGREMIO = J.IDGREMIO WHERE J.IDJUGADOR = ?";
+            PreparedStatement ps = conn.prepareStatement(guildQuery);
+            ps.setInt(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Guild(rs.getInt("IDGREMIO"),rs.getString("NOMBRE"),rs.getString("TIPO"), rs.getInt("LIDER"), "./photos/guild/"+rs.getString("IMAGEN"));
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+        }
+        return null;
     }
 }

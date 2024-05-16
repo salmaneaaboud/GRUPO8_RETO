@@ -1,6 +1,7 @@
 package businessLogic;
 
 import Domain.Character;
+import Domain.Guild;
 import Domain.Player;
 import Persistance.databaseQueries;
 
@@ -48,5 +49,13 @@ public class userQueries {
         if (player != null) {
             databaseQueries.insertUserMessage(player.getPlayerId(),message,conn);
         }
+    }
+
+    public static Guild getUserGuild(String username, Connection conn){
+        Player player = getUserByUsername(username,conn);
+        if (player != null){
+            return databaseQueries.getUsersGuild(player.getPlayerId(),conn);
+        }
+        return null;
     }
 }

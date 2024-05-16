@@ -1,6 +1,7 @@
 package Presentation;
 
 import Domain.Character;
+import Domain.Guild;
 import businessLogic.userQueries;
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,8 @@ import java.util.List;
 public class UserWindow extends JFrame {
     private final Connection conn;
     private final String saveUsername;
+    private JPanel panel;
+    private JPanel centerPanel;
 
     public UserWindow(Connection connection, String saveUsername) {
         this.conn = connection;
@@ -22,16 +25,16 @@ public class UserWindow extends JFrame {
         JFrame frame = new JFrame("Presentation.Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
-        JPanel panel = new JPanel(new BorderLayout());
+        panel = new JPanel(new BorderLayout());
         // North Area with FlowLayout
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
-        northPanel.add(createButtonWithListener("Characters", null));
+        northPanel.add(createButtonWithListener("Characters", e -> showCharacterPanel()));
         northPanel.add(createButtonWithListener("Messages", e -> userQueries.showUserMessages(saveUsername,conn)));
         northPanel.add(createButtonWithListener("Ranking", null));
         northPanel.add(createButtonWithListener("Missions", null));
         northPanel.add(createButtonWithListener("Regions", null));
-        northPanel.add(createButtonWithListener("Guild", null));
+        northPanel.add(createButtonWithListener("Guild", e -> createGuildPanel()));
         northPanel.add(createButtonWithListener("News", null));
         panel.add(northPanel, BorderLayout.NORTH);
 
@@ -51,18 +54,11 @@ public class UserWindow extends JFrame {
         panel.add(southPanel, BorderLayout.SOUTH);
 
         // Center with GridLayout simulating a grid of characters
-        JPanel centerPanel = new JPanel();
+        centerPanel = new JPanel();
         centerPanel.setLayout(new GridLayout(2, 5, 10, 10));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
-        // Creating custom panels to represent user's characters
-        List<Character> characters = userQueries.usersCharacters(saveUsername,conn);
-        if (characters != null) {
-            for (Character i : characters) {
-                centerPanel.add(Main.createCharacterPanel(i.getName(), i.getType() + " Level: " + i.getLevel(), i.getImage()));
-            }
-        }
-        panel.add(centerPanel, BorderLayout.CENTER);
+        showCharacterPanel();
 
         JButton supportButton = new JButton("Support");
         supportButton.addActionListener(e -> showSupportForm());
@@ -115,5 +111,47 @@ public class UserWindow extends JFrame {
         supportFrame.setVisible(true);
     }
 
+    private void showCharacterPanel() {
+        resetPanel(centerPanel);
+        List<Character> characters = userQueries.usersCharacters(saveUsername,conn);
+        if (characters != null) {
+            for (Character i : characters) {
+                centerPanel.add(Main.createCharacterPanel(i.getName(), i.getType() + " Level: " + i.getLevel(), i.getImage()));
+            }
+        }
+        panel.add(centerPanel, BorderLayout.CENTER);
+    }
 
+    private void createGuildPanel() {
+        resetPanel(centerPanel);
+        Guild guild = userQueries.getUserGuild(saveUsername, conn);
+        assert guild != null;
+
+        JPanel guildPanel = new JPanel();
+        guildPanel.setLayout(new BorderLayout());
+
+        JLabel guildName = new JLabel(guild.getGuildName());
+        guildName.setHorizontalAlignment(0);
+        guildPanel.add(guildName, BorderLayout.NORTH);
+
+        ImageIcon originalIcon = new ImageIcon(guild.getGuildImage());
+        Image scaledImage = originalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+        Main.addMouseHoverEffect(imageLabel,scaledIcon);
+
+        guildPanel.add(imageLabel, BorderLayout.CENTER);
+
+        guildPanel.setPreferredSize(centerPanel.getSize());
+        centerPanel.add(guildPanel);
+
+        centerPanel.revalidate();
+        centerPanel.repaint();
+    }
+
+    private void resetPanel(JPanel panel){
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
+    }
 }
