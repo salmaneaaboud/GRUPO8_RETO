@@ -1,15 +1,13 @@
 package Domain;
 
-import java.util.Objects;
-
-public class Character {
+public class Characters {
 
     private String name;
     private int level;
     private String type;
     private String image;
 
-    public Character(String name, int level, String type, String image) {
+    public Characters(String name, int level, String type, String image) {
         this.name = name;
         this.level = level;
         this.type = type;

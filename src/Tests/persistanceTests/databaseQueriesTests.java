@@ -1,6 +1,6 @@
-package Tests;
+package Tests.persistanceTests;
 
-import Domain.Character;
+import Domain.Characters;
 import Domain.Player;
 import Persistance.databaseQueries;
 import Persistance.Conexion;
@@ -47,11 +47,11 @@ public class databaseQueriesTests {
     @Test
     @Order(2)
     void testGetCharactersByPlayerName() {
-        List<Character> characters = databaseQueries.getCharactersByPlayerName("Firestorm99", conn);
+        List<Characters> characters = databaseQueries.getCharactersByPlayerName("Firestorm99", conn);
         assertNotNull(characters, "The list of characters should not be null.");
         assertFalse(characters.isEmpty(), "The list of characters should not be empty.");
 
-        Character character = characters.get(0);
+        Characters character = characters.get(0);
         assertEquals("Gimli", character.getName(), "Character name should match.");
     }
 

@@ -1,7 +1,8 @@
 package Presentation;
 
-import Domain.Character;
+import Domain.Characters;
 import Domain.Guild;
+import Exceptions.UserNotFoundException;
 import businessLogic.userQueries;
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +31,13 @@ public class UserWindow extends JFrame {
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new FlowLayout());
         northPanel.add(createButtonWithListener("Characters", e -> showCharacterPanel()));
-        northPanel.add(createButtonWithListener("Messages", e -> userQueries.showUserMessages(saveUsername,conn)));
+        northPanel.add(createButtonWithListener("Messages", e -> {
+            try {
+                userQueries.showUserMessages(saveUsername,conn);
+            } catch (UserNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }));
         northPanel.add(createButtonWithListener("Ranking", null));
         northPanel.add(createButtonWithListener("Missions", null));
         northPanel.add(createButtonWithListener("Regions", null));
@@ -96,7 +103,11 @@ public class UserWindow extends JFrame {
         sendButton.addActionListener(e -> {
             String message = messageTextArea.getText();
             if (!message.isEmpty()) {
-                userQueries.sendMessageToSupport(message,saveUsername,conn);
+                try {
+                    userQueries.sendMessageToSupport(message,saveUsername,conn);
+                } catch (UserNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
                 JOptionPane.showMessageDialog(supportFrame, "Message sent successfully!");
                 supportFrame.dispose();
             } else {
@@ -111,42 +122,47 @@ public class UserWindow extends JFrame {
         supportFrame.setVisible(true);
     }
 
-    private void showCharacterPanel() {
+    public void showCharacterPanel() {
         resetPanel(centerPanel);
-        List<Character> characters = userQueries.usersCharacters(saveUsername,conn);
+        List<Characters> characters = userQueries.usersCharacters(saveUsername,conn);
         if (characters != null) {
-            for (Character i : characters) {
+            for (Characters i : characters) {
                 centerPanel.add(Main.createCharacterPanel(i.getName(), i.getType() + " Level: " + i.getLevel(), i.getImage()));
             }
         }
         panel.add(centerPanel, BorderLayout.CENTER);
     }
 
-    private void createGuildPanel() {
+    public void createGuildPanel() {
         resetPanel(centerPanel);
-        Guild guild = userQueries.getUserGuild(saveUsername, conn);
-        assert guild != null;
+        try {
+            Guild guild = userQueries.getUserGuild(saveUsername, conn);
+            assert guild != null;
 
-        JPanel guildPanel = new JPanel();
-        guildPanel.setLayout(new BorderLayout());
+            JPanel guildPanel = new JPanel();
+            guildPanel.setLayout(new BorderLayout());
 
-        JLabel guildName = new JLabel(guild.getGuildName());
-        guildName.setHorizontalAlignment(0);
-        guildPanel.add(guildName, BorderLayout.NORTH);
+            JLabel guildName = new JLabel(guild.getGuildName());
+            guildName.setHorizontalAlignment(0);
+            guildPanel.add(guildName, BorderLayout.NORTH);
 
-        ImageIcon originalIcon = new ImageIcon(guild.getGuildImage());
-        Image scaledImage = originalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
-        Main.addMouseHoverEffect(imageLabel,scaledIcon);
+            ImageIcon originalIcon = new ImageIcon(guild.getGuildImage());
+            Image scaledImage = originalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+            JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+            Main.addMouseHoverEffect(imageLabel,scaledIcon);
 
-        guildPanel.add(imageLabel, BorderLayout.CENTER);
+            guildPanel.add(imageLabel, BorderLayout.CENTER);
 
-        guildPanel.setPreferredSize(centerPanel.getSize());
-        centerPanel.add(guildPanel);
+            guildPanel.setPreferredSize(centerPanel.getSize());
+            centerPanel.add(guildPanel);
+        } catch (UserNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-        centerPanel.revalidate();
-        centerPanel.repaint();
+    public JPanel getCenterPanel() {
+        return this.centerPanel;
     }
 
     private void resetPanel(JPanel panel){

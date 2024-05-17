@@ -1,8 +1,9 @@
 package businessLogic;
 
-import Domain.Character;
+import Domain.Characters;
 import Domain.Guild;
 import Domain.Player;
+import Exceptions.UserNotFoundException;
 import Persistance.databaseQueries;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class userQueries {
 
-    public static void showUserMessages(String username, Connection conn) {
+    public static void showUserMessages(String username, Connection conn) throws UserNotFoundException {
         Player player = getUserByUsername(username,conn);
 
         if (player != null) {
@@ -23,6 +24,7 @@ public class userQueries {
 
         } else {
             JOptionPane.showMessageDialog(null, "User not found: " + username, "Error", JOptionPane.ERROR_MESSAGE);
+            throw new UserNotFoundException("User not found: " + username);
         }
     }
 
@@ -40,22 +42,25 @@ public class userQueries {
         return null;
     }
 
-    public static List<Character> usersCharacters (String username, Connection conn) {
+    public static List<Characters> usersCharacters (String username, Connection conn) {
         return databaseQueries.getCharactersByPlayerName(username,conn);
     }
 
-    public static void sendMessageToSupport(String message, String username, Connection conn) {
+    public static void sendMessageToSupport(String message, String username, Connection conn) throws UserNotFoundException{
         Player player = getUserByUsername(username,conn);
         if (player != null) {
             databaseQueries.insertUserMessage(player.getPlayerId(),message,conn);
+        } else {
+            throw new UserNotFoundException("User not found!");
         }
     }
 
-    public static Guild getUserGuild(String username, Connection conn){
+    public static Guild getUserGuild(String username, Connection conn) throws UserNotFoundException {
         Player player = getUserByUsername(username,conn);
         if (player != null){
             return databaseQueries.getUsersGuild(player.getPlayerId(),conn);
+        } else {
+            throw new UserNotFoundException("User not found!");
         }
-        return null;
     }
 }

@@ -8,7 +8,7 @@ import java.awt.*;
 import java.sql.Connection;
 
 public class Main extends JFrame {
-    private static Connection conn;
+    public static Connection conn;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::createAndShowGUI);

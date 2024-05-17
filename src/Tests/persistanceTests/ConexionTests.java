@@ -1,4 +1,4 @@
-package Tests;
+package Tests.persistanceTests;
 
 import Persistance.Conexion;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ConexionTest {
+class ConexionTests {
     private Conexion conexion;
 
     @BeforeEach

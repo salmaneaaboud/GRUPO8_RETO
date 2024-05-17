@@ -15,7 +15,7 @@ public class AdminWindow extends JFrame {
     }
 
     public void createAdminPanel() {
-        JFrame frame = new JFrame("Presentation.Main Application");
+        JFrame frame = new JFrame("Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         JPanel panel = new JPanel(new BorderLayout());
@@ -52,7 +52,7 @@ public class AdminWindow extends JFrame {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.LINE_AXIS));
 
         // Panel for user list on the left
-        JList<String> userList = adminQueries.createUserListPanel(conn);
+        JList<String> userList = adminQueries.getUsersList(conn);
         centerPanel.add(new JScrollPane(userList));
 
         JList<String> charactersList = new JList<>();
@@ -90,7 +90,9 @@ public class AdminWindow extends JFrame {
 
         supportMessagesFrame.add(scrollPane);
         supportMessagesFrame.setVisible(true);
+    }
 
-
+    public Connection getConnection() {
+        return conn;
     }
 }

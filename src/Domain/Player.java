@@ -19,6 +19,11 @@ public class Player {
         this.email = email;
     }
 
+    public Player(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
     public int getPlayerId() {
         return playerId;
     }
@@ -84,12 +89,12 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Jugador{" +
-                "idJugador='" + playerId + '\'' +
-                ", rango='" + ranking + '\'' +
-                ", nivel=" + level +
-                ", nombre='" + name + '\'' +
-                ", clave='" + password + '\'' +
+        return "Player{" +
+                "idPlayer='" + playerId + '\'' +
+                ", ranking='" + ranking + '\'' +
+                ", level=" + level +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

@@ -1,6 +1,6 @@
 package Persistance;
 
-import Domain.Character;
+import Domain.Characters;
 import Domain.Guild;
 import Domain.Player;
 
@@ -10,16 +10,19 @@ import java.util.List;
 
 public class databaseQueries {
 
-    public static List<Character> getCharactersByPlayerName(String playerName, Connection conn) {
+    public static List<Characters> getCharactersByPlayerName(String playerName, Connection conn) {
         try {
+            if (conn == null) {
+                throw new IllegalArgumentException("Connection cannot be null");
+            }
             String charactersQuery = "SELECT P.NOMBRE,P.NIVEL,P.TIPO,P.IMAGEN FROM PERSONAJE P INNER JOIN JUGADOR J ON P.IDJUGADOR = J.IDJUGADOR WHERE J.NOMBRE = ?";
             PreparedStatement ps = conn.prepareStatement(charactersQuery);
             ps.setString(1, playerName);
             ResultSet rs = ps.executeQuery();
 
-            List<Character> characters = new ArrayList<>();
+            List<Characters> characters = new ArrayList<>();
             while (rs.next()) {
-                Character character = new Character(
+                Characters character = new Characters(
                         rs.getString("NOMBRE"),
                         rs.getInt("NIVEL"),
                         rs.getString("TIPO"),
