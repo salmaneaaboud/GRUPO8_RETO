@@ -1,6 +1,6 @@
 package Tests.domainTests;
 
-import Domain.gameObject;
+import Main.Domain.gameObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -18,9 +18,13 @@ public class gameObjectTests {
         gameObject object1 = new gameObject("1", "Sword", "A sharp blade", 100);
         gameObject object2 = new gameObject("1", "Sword", "A sharp blade", 100);
         gameObject object3 = new gameObject("2", "Shield", "A sturdy shield", 150);
+        gameObject object4 = new gameObject("1", "Different Sword", "A different sharp blade", 200);
 
         assertEquals(object1, object2);
+
         assertNotEquals(object1, object3);
+
+        assertEquals(object1, object4);
     }
 
     @Test
@@ -31,6 +35,7 @@ public class gameObjectTests {
         gameObject object3 = new gameObject("2", "Shield", "A sturdy shield", 150);
 
         assertEquals(object1.hashCode(), object2.hashCode());
+
         assertNotEquals(object1.hashCode(), object3.hashCode());
     }
 
@@ -47,6 +52,11 @@ public class gameObjectTests {
     @Order(4)
     public void testGettersAndSetters() {
         gameObject object = new gameObject("1", "Sword", "A sharp blade", 100);
+
+        assertEquals("1", object.getObjectId());
+        assertEquals("Sword", object.getName());
+        assertEquals("A sharp blade", object.getDescription());
+        assertEquals(100, object.getPrice());
 
         object.setObjectId("2");
         object.setName("Shield");

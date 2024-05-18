@@ -1,9 +1,9 @@
-package businessLogic;
+package Main.businessLogic;
 
-import Presentation.AdminWindow;
-import Presentation.UserWindow;
-import Domain.Player;
-import Persistance.databaseQueries;
+import Main.Presentation.AdminWindow;
+import Main.Presentation.UserWindow;
+import Main.Domain.Player;
+import Main.Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,9 +1,9 @@
-package Presentation;
+package Main.Presentation;
 
-import Domain.Characters;
-import Domain.Guild;
+import Main.Domain.Characters;
+import Main.Domain.Guild;
 import Exceptions.UserNotFoundException;
-import businessLogic.userQueries;
+import Main.businessLogic.userQueries;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -23,7 +23,7 @@ public class UserWindow extends JFrame {
     }
 
     public void createUserPanel() {
-        JFrame frame = new JFrame("Presentation.Main Application");
+        JFrame frame = new JFrame("Main.Presentation.Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         panel = new JPanel(new BorderLayout());

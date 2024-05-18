@@ -1,11 +1,10 @@
 package Tests.domainTests;
 
-import Domain.Player;
+import Main.Domain.Player;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class playerTests {
     @Test
@@ -17,6 +16,9 @@ public class playerTests {
 
         assertEquals(player1, player2);
         assertNotEquals(player1, player3);
+        assertNotEquals(player1, "Not a Player object");
+        assertNotEquals(player1, null);
+        assertEquals(player1, player1);
     }
 
     @Test
@@ -55,5 +57,35 @@ public class playerTests {
         assertEquals("Alice", player.getName());
         assertEquals("password", player.getPassword());
         assertEquals("alice@example.com", player.getEmail());
+    }
+
+    @Test
+    @Order(5)
+    public void testEqualsWithDifferentType() {
+        Player player = new Player(1, "Silver", 10, "Alice", "password", "alice@example.com");
+        assertNotEquals(player, "Not a Player object");
+    }
+
+    @Test
+    @Order(6)
+    public void testEqualsWithNull() {
+        Player player = new Player(1, "Silver", 10, "Alice", "password", "alice@example.com");
+        assertNotEquals(player, null);
+    }
+
+    @Test
+    @Order(7)
+    public void testEqualsWithItself() {
+        Player player = new Player(1, "Silver", 10, "Alice", "password", "alice@example.com");
+        assertEquals(player, player);
+    }
+
+    @Test
+    @Order(8)
+    public void testHashCodeConsistency() {
+        Player player = new Player(1, "Silver", 10, "Alice", "password", "alice@example.com");
+        int hashCode1 = player.hashCode();
+        int hashCode2 = player.hashCode();
+        assertEquals(hashCode1, hashCode2);
     }
 }

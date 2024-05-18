@@ -1,8 +1,8 @@
-package businessLogic;
+package Main.businessLogic;
 
-import Domain.Characters;
-import Domain.Player;
-import Persistance.databaseQueries;
+import Main.Domain.Characters;
+import Main.Domain.Player;
+import Main.Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.sql.*;

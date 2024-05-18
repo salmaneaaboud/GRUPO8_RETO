@@ -1,6 +1,6 @@
 package Tests.businessLogicTests;
-import Persistance.Conexion;
-import businessLogic.adminQueries;
+import Main.Persistance.Conexion;
+import Main.businessLogic.adminQueries;
 import org.junit.jupiter.api.*;
 
 import javax.swing.*;

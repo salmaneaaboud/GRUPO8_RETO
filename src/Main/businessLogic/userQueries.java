@@ -1,10 +1,10 @@
-package businessLogic;
+package Main.businessLogic;
 
-import Domain.Characters;
-import Domain.Guild;
-import Domain.Player;
+import Main.Domain.Characters;
+import Main.Domain.Guild;
+import Main.Domain.Player;
 import Exceptions.UserNotFoundException;
-import Persistance.databaseQueries;
+import Main.Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.sql.Connection;

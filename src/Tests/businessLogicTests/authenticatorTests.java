@@ -1,15 +1,13 @@
 package Tests.businessLogicTests;
 
-import Persistance.Conexion;
-import businessLogic.Authenticator;
+import Main.Persistance.Conexion;
+import Main.businessLogic.Authenticator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -111,4 +109,6 @@ public class authenticatorTests {
 
         assertFalse(parentFrame.isVisible());
     }
+
+
 }

@@ -1,4 +1,4 @@
-package Persistance;
+package Main.Persistance;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,11 +8,9 @@ public class Conexion {
     Connection connection;
     String usuario = "videojuegosdb";
     String password = "zubiri";
-    String url;
+    String url = "jdbc:oracle:thin:@localhost:1521:xe";
 
-    public Conexion(){
-        this.url = "jdbc:oracle:thin:@10.14.4.139:1521:orclcdb";
-    }
+    public Conexion(){}
 
     public Connection conectar(){
         try {
@@ -21,7 +19,7 @@ public class Conexion {
             System.out.println("Connected successfully!");
         }
         catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("An error was found connecting to the database!");
         }
         return connection;
     }
@@ -36,5 +34,29 @@ public class Conexion {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 }

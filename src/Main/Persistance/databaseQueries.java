@@ -1,8 +1,8 @@
-package Persistance;
+package Main.Persistance;
 
-import Domain.Characters;
-import Domain.Guild;
-import Domain.Player;
+import Main.Domain.Characters;
+import Main.Domain.Guild;
+import Main.Domain.Player;
 
 import java.sql.*;
 import java.util.ArrayList;

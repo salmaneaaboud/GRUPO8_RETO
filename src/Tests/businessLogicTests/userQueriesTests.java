@@ -1,9 +1,9 @@
 package Tests.businessLogicTests;
 
-import Domain.Characters;
-import Domain.Player;
-import Persistance.Conexion;
-import businessLogic.userQueries;
+import Main.Domain.Characters;
+import Main.Domain.Player;
+import Main.Persistance.Conexion;
+import Main.businessLogic.userQueries;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;

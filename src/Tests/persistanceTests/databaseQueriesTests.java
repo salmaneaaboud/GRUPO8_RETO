@@ -1,9 +1,9 @@
 package Tests.persistanceTests;
 
-import Domain.Characters;
-import Domain.Player;
-import Persistance.databaseQueries;
-import Persistance.Conexion;
+import Main.Domain.Characters;
+import Main.Domain.Player;
+import Main.Persistance.databaseQueries;
+import Main.Persistance.Conexion;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
@@ -85,4 +85,36 @@ public class databaseQueriesTests {
         assertTrue(messages.toString().contains("Test message"), "Messages should contain the test message.");
     }
 
+    @Test
+    @Order(6)
+    void testGetCharactersByPlayerName_NullConnection() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            databaseQueries.getCharactersByPlayerName("Firestorm99", null);
+        });
+    }
+
+    @Test
+    @Order(7)
+    void testGetUserMessages_HandleSQLException() {
+        assertThrows(RuntimeException.class, () -> {
+            databaseQueries.getUserMessages(null);
+        });
+    }
+
+    @Test
+    @Order(8)
+    void testInsertUserMessage_HandleSQLException() {
+        assertThrows(RuntimeException.class, () -> {
+            databaseQueries.insertUserMessage(1, "Test message", null);
+        });
+    }
+
+    @Test
+    @Order(9)
+    void testShowUserMessages_HandleSQLException() {
+        assertThrows(RuntimeException.class, () -> {
+            Player player = new Player(1, "Novato", 1, "Player1", "pass1", "player1@example.com");
+            databaseQueries.showUserMessages(player, null);
+        });
+    }
 }

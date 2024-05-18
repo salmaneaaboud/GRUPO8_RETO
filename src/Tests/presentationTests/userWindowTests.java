@@ -1,7 +1,7 @@
 package Tests.presentationTests;
 
-import Persistance.Conexion;
-import Presentation.UserWindow;
+import Main.Persistance.Conexion;
+import Main.Presentation.UserWindow;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.*;

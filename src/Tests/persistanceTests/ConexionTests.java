@@ -1,6 +1,6 @@
 package Tests.persistanceTests;
 
-import Persistance.Conexion;
+import Main.Persistance.Conexion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -9,15 +9,13 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ConexionTests {
     private Conexion conexion;
 
     @BeforeEach
     void setUp() {
-        // Set up dataAccess.Conexion instance for each test
         conexion = new Conexion();
     }
 
@@ -25,9 +23,39 @@ class ConexionTests {
     @DisplayName("Connection")
     @Tag("Controlador")
     void testConectar() throws SQLException {
-        // Call conectar method and check if it returns a valid Connection object
         Connection connection = conexion.conectar();
         assertNotNull(connection);
-        assertTrue(connection.isValid(5)); // Check if the connection is valid
+        assertTrue(connection.isValid(5));
+    }
+
+    @Test
+    void testDesconectar() {
+        Connection conn = conexion.conectar();
+
+        conexion.desconectar();
+
+        assertThrows(SQLException.class, () -> conn.createStatement().executeQuery("SELECT 1 FROM DUAL"), "Connection should be closed and executing query should throw SQLException");
+    }
+
+    @Test
+    void desconectar_HandleSQLException() {
+        assertThrows(RuntimeException.class, () -> {
+            conexion.desconectar();
+        });
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        String testUrl = "jdbc:oracle:thin:@localhost:3306:test";
+        String testPassword = "test";
+        String testUsuario = "testUser";
+
+        conexion.setUrl(testUrl);
+        conexion.setPassword(testPassword);
+        conexion.setUsuario(testUsuario);
+
+        assertEquals(testUrl, conexion.getUrl());
+        assertEquals(testPassword, conexion.getPassword());
+        assertEquals(testUsuario, conexion.getUsuario());
     }
 }

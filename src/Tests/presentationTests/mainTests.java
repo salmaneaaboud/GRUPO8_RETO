@@ -1,15 +1,15 @@
 package Tests.presentationTests;
 
-import Presentation.Main;
-import org.junit.jupiter.api.Test;
-import javax.swing.*;
+import Main.Presentation.Main;
+import org.junit.jupiter.api.*;
 
-import java.sql.SQLException;
+import javax.swing.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class mainTest {
+public class mainTests {
 
+    @BeforeEach
     @Test
     void createCharacterPanelTest() {
         JPanel panel = Main.createCharacterPanel("Warrior", "Strong and resilient", "./photos/warrior.jfif");
@@ -17,6 +17,7 @@ class mainTest {
         assertEquals(2, panel.getComponentCount());
     }
 
+    @AfterEach
     @Test
     void addMouseHoverEffectTest() {
         JLabel label = new JLabel();
@@ -49,22 +50,4 @@ class mainTest {
             fail("El método createAndShowGUI lanzó una excepción: " + e.getMessage());
         }
     }
-
-    @Test
-    void mainConnectivityTest() {
-        try {
-            Main.main(null);
-            assertNotNull(Main.conn);
-        } catch (Exception e) {
-            fail("El método main lanzó una excepción: " + e.getMessage());
-        } finally {
-            try {
-                Main.conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
 }

@@ -1,6 +1,6 @@
 package Tests.domainTests;
 
-import Domain.Characters;
+import Main.Domain.Characters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

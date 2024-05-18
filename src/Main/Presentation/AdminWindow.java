@@ -1,6 +1,6 @@
-package Presentation;
+package Main.Presentation;
 
-import businessLogic.adminQueries;
+import Main.businessLogic.adminQueries;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,7 +74,7 @@ public class AdminWindow extends JFrame {
         frame.setVisible(true);
     }
 
-    private void showSupportMessages() {
+    public void showSupportMessages() {
         JFrame supportMessagesFrame = new JFrame("Support Messages");
         supportMessagesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         supportMessagesFrame.setSize(600, 400);

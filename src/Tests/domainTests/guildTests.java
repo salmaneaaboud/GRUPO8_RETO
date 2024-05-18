@@ -1,6 +1,6 @@
 package Tests.domainTests;
 
-import Domain.Guild;
+import Main.Domain.Guild;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

@@ -1,7 +1,7 @@
-package Presentation;
+package Main.Presentation;
 
-import Persistance.Conexion;
-import businessLogic.Authenticator;
+import Main.Persistance.Conexion;
+import Main.businessLogic.Authenticator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class Main extends JFrame {
     }
 
     public static void createAndShowGUI() {
-        JFrame frame = new JFrame("Presentation.Main Application");
+        JFrame frame = new JFrame("Main.Presentation.Main Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         conn = new Conexion().conectar();
