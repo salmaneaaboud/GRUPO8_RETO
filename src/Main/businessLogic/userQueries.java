@@ -1,9 +1,6 @@
 package Main.businessLogic;
 
-import Main.Domain.Characters;
-import Main.Domain.Guild;
-import Main.Domain.Mission;
-import Main.Domain.Player;
+import Main.Domain.*;
 import Exceptions.UserNotFoundException;
 import Main.Persistance.databaseQueries;
 
@@ -73,5 +70,9 @@ public class userQueries {
 
     public static ArrayList<Mission> getLatestMissions(Connection conn) {
         return new ArrayList<>(Objects.requireNonNull(databaseQueries.getLatestMissions(conn)));
+    }
+
+    public static ArrayList<Region> getRegions(Connection conn) {
+        return new ArrayList<>(Objects.requireNonNull(databaseQueries.getRegions(conn)));
     }
 }

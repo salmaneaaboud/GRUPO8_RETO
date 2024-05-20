@@ -1,9 +1,6 @@
 package Main.Persistance;
 
-import Main.Domain.Characters;
-import Main.Domain.Guild;
-import Main.Domain.Mission;
-import Main.Domain.Player;
+import Main.Domain.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -262,6 +259,30 @@ public class databaseQueries {
             return missions;
         } catch (SQLException e) {
             System.out.println("Failed to load players");
+        }
+        return null;
+    }
+
+    public static ArrayList<Region> getRegions(Connection conn) {
+        try {
+            ArrayList<Region> regions = new ArrayList<>();
+            String regionsQuery = "SELECT * FROM REGION ORDER BY IDREGION ASC FETCH FIRST 4 ROWS ONLY";
+            PreparedStatement ps = conn.prepareStatement(regionsQuery);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Region region = new Region(
+                        rs.getInt("IDREGION"),
+                        rs.getString("NOMBRE"),
+                        rs.getString("DESCRIPCION"),
+                        rs.getString("RECOMENDACION"),
+                        "./photos/maps/"+rs.getString("IMAGEN")
+                );
+                regions.add(region);
+            }
+            ps.close();
+            return regions;
+        } catch (SQLException e) {
+            System.out.println("Failed to load regions");
         }
         return null;
     }

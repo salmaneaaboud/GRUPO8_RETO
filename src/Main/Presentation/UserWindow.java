@@ -5,6 +5,7 @@ import Exceptions.UserNotFoundException;
 import Main.businessLogic.userQueries;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class UserWindow extends JFrame {
         }));
         northPanel.add(createButtonWithListener("Ranking", e -> Main.loadRankings(centerPanel)));
         northPanel.add(createButtonWithListener("Missions", e -> showMissionsPanel()));
-        northPanel.add(createButtonWithListener("Regions", null));
+        northPanel.add(createButtonWithListener("Regions", e -> showRegionsPanel()));
         northPanel.add(createButtonWithListener("Guild", e -> createGuildPanel()));
         northPanel.add(createButtonWithListener("News", e -> Main.loadNews(centerPanel)));
         backgroundPanel.add(northPanel, BorderLayout.NORTH);
@@ -211,6 +212,64 @@ public class UserWindow extends JFrame {
             throw new RuntimeException(ex);
         }
     }
+
+    public void showRegionsPanel() {
+        Main.resetCenterPanel(centerPanel);
+        CardLayout cardLayout = new CardLayout();
+        centerPanel.setLayout(cardLayout);
+
+        List<Region> regions = userQueries.getRegions(conn);
+        if (regions != null) {
+            for (Region region : regions) {
+                JPanel regionPanel = new JPanel(new BorderLayout());
+                regionPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+                regionPanel.setBackground(new Color(227, 182, 135));
+                regionPanel.setPreferredSize(new Dimension(300, 400));
+
+                JLabel nameLabel = new JLabel("Region: " + region.getName());
+                nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                titlePanel.setBackground(new Color(227, 182, 135));
+                titlePanel.add(nameLabel);
+                regionPanel.add(titlePanel, BorderLayout.NORTH);
+
+                JPanel infoPanel = new JPanel(new GridLayout(3, 1));
+                infoPanel.setBackground(new Color(227, 182, 135));
+                infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                JLabel descriptionLabel = new JLabel("Description: " + region.getDescription());
+                descriptionLabel.setFont(new Font("Arial",Font.PLAIN,18));
+                JLabel recommendationLabel = new JLabel("Recommendation: " + region.getRecommendation());
+                recommendationLabel.setFont(new Font("Arial",Font.PLAIN,18));
+                infoPanel.add(descriptionLabel);
+                infoPanel.add(recommendationLabel);
+                regionPanel.add(infoPanel, BorderLayout.CENTER);
+
+                ImageIcon originalIcon = new ImageIcon(region.getImage());
+                Image scaledImage = originalIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                JLabel imageLabel = new JLabel(scaledIcon);
+                regionPanel.add(imageLabel, BorderLayout.SOUTH);
+
+                centerPanel.add(regionPanel, region.getName());
+            }
+        }
+
+        JPanel navigationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton prevButton = new JButton("Previous");
+        JButton nextButton = new JButton("Next");
+
+        prevButton.addActionListener(e -> cardLayout.previous(centerPanel));
+        nextButton.addActionListener(e -> cardLayout.next(centerPanel));
+
+        navigationPanel.add(prevButton);
+        navigationPanel.add(nextButton);
+        navigationPanel.setOpaque(false);
+        navigationPanel.setPreferredSize(new Dimension(400, 50));
+
+        backgroundPanel.add(navigationPanel, BorderLayout.SOUTH);
+    }
+
 
     public JPanel getCenterPanel() {
         return centerPanel;
