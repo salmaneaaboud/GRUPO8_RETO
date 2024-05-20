@@ -60,8 +60,14 @@ public class Main extends JFrame {
         rankingButton.addActionListener(e -> loadRankings(centerPanel));
         northPanel.add(rankingButton);
 
-        northPanel.add(createCustomButton("Missions"));
-        northPanel.add(createCustomButton("Regions"));
+        JButton missionsButton = createCustomButton("Missions");
+        northPanel.add(missionsButton);
+        missionsButton.addActionListener(e -> Authenticator.showLoginForm(frame, conn));
+
+        JButton regionsButton = createCustomButton("Regions");
+        northPanel.add(regionsButton);
+        regionsButton.addActionListener(e -> Authenticator.showLoginForm(frame, conn));
+
         JButton newsButton = createCustomButton("News");
         newsButton.addActionListener(e -> loadNews(centerPanel));
         northPanel.add(newsButton);
@@ -182,7 +188,7 @@ public class Main extends JFrame {
 
         ArrayList<Player> topPlayers = databaseQueries.getTopPlayers(conn);
         JPanel topPlayersPanel = new JPanel();
-        topPlayersPanel.setBorder(BorderFactory.createTitledBorder("Top 5 Best Players"));
+        topPlayersPanel.setBorder(BorderFactory.createTitledBorder("Top 10 Best Players"));
         topPlayersPanel.setLayout(new BoxLayout(topPlayersPanel, BoxLayout.Y_AXIS));
         assert topPlayers != null;
         for (Player player : topPlayers) {
@@ -194,7 +200,7 @@ public class Main extends JFrame {
 
         ArrayList<Characters> topCharacters = databaseQueries.getTopCharacters(conn);
         JPanel topCharactersPanel = new JPanel();
-        topCharactersPanel.setBorder(BorderFactory.createTitledBorder("Top 5 Best Characters"));
+        topCharactersPanel.setBorder(BorderFactory.createTitledBorder("Top 10 Best Characters"));
         topCharactersPanel.setLayout(new BoxLayout(topCharactersPanel, BoxLayout.Y_AXIS));
         assert topCharacters != null;
         for (Characters character : topCharacters) {

@@ -160,7 +160,7 @@ public class AdminWindow extends JFrame {
             }
         }
         JList<String> topCharactersList = new JList<>(charactersListModel);
-        rankingsPanel.add(new JLabel("Top 5 Best Characters"));
+        rankingsPanel.add(new JLabel("Top 10 Best Characters"));
         rankingsPanel.add(new JScrollPane(topCharactersList));
 
         DefaultListModel<String> playersListModel = new DefaultListModel<>();
@@ -171,7 +171,7 @@ public class AdminWindow extends JFrame {
             }
         }
         JList<String> topPlayersList = new JList<>(charactersListModel);
-        rankingsPanel.add(new JLabel("Top 5 Best Players"));
+        rankingsPanel.add(new JLabel("Top 10 Best Players"));
         rankingsPanel.add(new JScrollPane(topPlayersList));
 
 

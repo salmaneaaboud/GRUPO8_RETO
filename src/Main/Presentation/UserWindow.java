@@ -1,15 +1,15 @@
 package Main.Presentation;
 
-import Main.Domain.BackgroundPanel;
-import Main.Domain.Characters;
-import Main.Domain.Guild;
+import Main.Domain.*;
 import Exceptions.UserNotFoundException;
 import Main.businessLogic.userQueries;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserWindow extends JFrame {
     private final Connection conn;
@@ -43,7 +43,7 @@ public class UserWindow extends JFrame {
             }
         }));
         northPanel.add(createButtonWithListener("Ranking", e -> Main.loadRankings(centerPanel)));
-        northPanel.add(createButtonWithListener("Missions", null));
+        northPanel.add(createButtonWithListener("Missions", e -> showMissionsPanel()));
         northPanel.add(createButtonWithListener("Regions", null));
         northPanel.add(createButtonWithListener("Guild", e -> createGuildPanel()));
         northPanel.add(createButtonWithListener("News", e -> Main.loadNews(centerPanel)));
@@ -85,11 +85,7 @@ public class UserWindow extends JFrame {
 
     private JButton createButtonWithListener(String buttonText, ActionListener actionListener) {
         JButton button = Main.createCustomButton(buttonText);
-        if (actionListener != null) {
-            button.addActionListener(actionListener);
-        } else {
-            button.addActionListener(e -> JOptionPane.showMessageDialog(null, "Coming Soon"));
-        }
+        button.addActionListener(Objects.requireNonNullElseGet(actionListener, () -> e -> JOptionPane.showMessageDialog(null, "Coming Soon")));
         return button;
     }
 
@@ -136,6 +132,35 @@ public class UserWindow extends JFrame {
         backgroundPanel.add(centerPanel, BorderLayout.CENTER);
     }
 
+    public void showMissionsPanel() {
+        Main.resetCenterPanel(centerPanel);
+        centerPanel.setLayout(new GridLayout(0, 1, 10, 10));
+
+        ArrayList<Mission> missions = userQueries.getLatestMissions(conn);
+        for (Mission mission : missions) {
+            JPanel missionPanel = new JPanel(new BorderLayout());
+            missionPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            missionPanel.setBackground(Color.WHITE);
+
+            JLabel titleLabel = new JLabel("Mission: " + mission.getDescription());
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            titlePanel.add(titleLabel);
+            missionPanel.add(titlePanel, BorderLayout.NORTH);
+
+            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+            infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            JLabel rewardLabel = new JLabel("Reward: " + mission.getReward());
+            JLabel difficultyLabel = new JLabel("Difficulty: " + mission.getDifficulty());
+            infoPanel.add(rewardLabel);
+            infoPanel.add(difficultyLabel);
+            missionPanel.add(infoPanel, BorderLayout.CENTER);
+
+            centerPanel.add(missionPanel);
+        }
+        backgroundPanel.add(centerPanel, BorderLayout.CENTER);
+    }
+
     public void createGuildPanel() {
         Main.resetCenterPanel(centerPanel);
         try {
@@ -146,19 +171,41 @@ public class UserWindow extends JFrame {
             guildPanel.setLayout(new BorderLayout());
 
             JLabel guildName = new JLabel(guild.getGuildName());
-            guildName.setFont(new Font("Arial",Font.BOLD,20));
-            guildName.setHorizontalAlignment(0);
+            guildName.setFont(new Font("Arial", Font.BOLD, 20));
+            guildName.setHorizontalAlignment(SwingConstants.CENTER);
             guildPanel.add(guildName, BorderLayout.NORTH);
 
             ImageIcon originalIcon = new ImageIcon(guild.getGuildImage());
             Image scaledImage = originalIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
-            JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
-            Main.addMouseHoverEffect(imageLabel,scaledIcon);
+            JLabel imageLabel = new JLabel(scaledIcon);
+            Main.addMouseHoverEffect(imageLabel, scaledIcon);
 
             guildPanel.add(imageLabel, BorderLayout.CENTER);
 
-            guildPanel.setPreferredSize(centerPanel.getSize());
+            JPanel playersPanel = new JPanel();
+            playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.Y_AXIS));
+            playersPanel.setOpaque(false);
+            List<Player> players = userQueries.getGuildPlayers(guild.getGuildName(), conn);
+            for (Player player : players) {
+                JLabel playerLabel = new JLabel(player.getName() + " - Level: " + player.getLevel());
+                playersPanel.add(playerLabel);
+            }
+
+            JTextArea chatArea = new JTextArea();
+            chatArea.setEditable(false);
+            chatArea.setText("Chat functionality coming soon...");
+
+            JScrollPane chatScrollPane = new JScrollPane(chatArea);
+            chatScrollPane.setPreferredSize(new Dimension(300, 100));
+
+            JPanel southPanel = new JPanel(new BorderLayout());
+            southPanel.add(new JLabel("Guild Players:"), BorderLayout.NORTH);
+            southPanel.add(new JScrollPane(playersPanel), BorderLayout.CENTER);
+            southPanel.add(chatScrollPane, BorderLayout.SOUTH);
+
+            guildPanel.add(southPanel, BorderLayout.SOUTH);
+
             centerPanel.add(guildPanel);
         } catch (UserNotFoundException ex) {
             throw new RuntimeException(ex);
@@ -166,7 +213,7 @@ public class UserWindow extends JFrame {
     }
 
     public JPanel getCenterPanel() {
-        return this.centerPanel;
+        return centerPanel;
     }
 
 

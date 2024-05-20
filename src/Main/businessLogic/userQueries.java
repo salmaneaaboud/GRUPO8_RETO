@@ -2,13 +2,16 @@ package Main.businessLogic;
 
 import Main.Domain.Characters;
 import Main.Domain.Guild;
+import Main.Domain.Mission;
 import Main.Domain.Player;
 import Exceptions.UserNotFoundException;
 import Main.Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class userQueries {
 
@@ -62,5 +65,13 @@ public class userQueries {
         } else {
             throw new UserNotFoundException("User not found!");
         }
+    }
+
+    public static ArrayList<Player> getGuildPlayers(String guild, Connection conn) {
+        return new ArrayList<>(Objects.requireNonNull(databaseQueries.getGuildsPlayer(conn, guild)));
+    }
+
+    public static ArrayList<Mission> getLatestMissions(Connection conn) {
+        return new ArrayList<>(Objects.requireNonNull(databaseQueries.getLatestMissions(conn)));
     }
 }

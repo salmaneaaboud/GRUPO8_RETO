@@ -2,6 +2,7 @@ package Main.Persistance;
 
 import Main.Domain.Characters;
 import Main.Domain.Guild;
+import Main.Domain.Mission;
 import Main.Domain.Player;
 
 import java.sql.*;
@@ -78,7 +79,7 @@ public class databaseQueries {
             }
             return players;
         } catch (SQLException e) {
-            System.out.println("Cannot load user messages");
+            System.out.println("Cannot load users");
         }
         return null;
     }
@@ -138,7 +139,7 @@ public class databaseQueries {
 
             return guilds;
         } catch (SQLException e) {
-            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+            System.out.println("An error occurred while getting the guilds: " + e.getMessage());
         }
         return null;
     }
@@ -158,7 +159,7 @@ public class databaseQueries {
             ps.close();
 
         } catch (SQLException e) {
-            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+            System.out.println("An error occurred while getting user's guild: " + e.getMessage());
         }
         return null;
     }
@@ -188,7 +189,7 @@ public class databaseQueries {
 
             return players;
         } catch (SQLException e) {
-            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+            System.out.println("An error occurred while getting the guild's players: " + e.getMessage());
         }
         return null;
     }
@@ -196,7 +197,7 @@ public class databaseQueries {
     public static ArrayList<Player> getTopPlayers(Connection conn) {
         try {
             ArrayList<Player> topPlayers = new ArrayList<>();
-            String playersQuery = "SELECT * FROM JUGADOR ORDER BY NIVEL DESC FETCH FIRST 5 ROWS ONLY";
+            String playersQuery = "SELECT * FROM JUGADOR ORDER BY NIVEL DESC FETCH FIRST 10 ROWS ONLY";
             PreparedStatement ps = conn.prepareStatement(playersQuery);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -221,7 +222,7 @@ public class databaseQueries {
     public static ArrayList<Characters> getTopCharacters(Connection conn) {
         try {
             ArrayList<Characters> topCharacters = new ArrayList<>();
-            String playersQuery = "SELECT * FROM PERSONAJE ORDER BY PUNTOSVALOR DESC FETCH FIRST 5 ROWS ONLY";
+            String playersQuery = "SELECT * FROM PERSONAJE ORDER BY PUNTOSVALOR DESC FETCH FIRST 10 ROWS ONLY";
             PreparedStatement ps = conn.prepareStatement(playersQuery);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -235,6 +236,30 @@ public class databaseQueries {
             }
             ps.close();
             return topCharacters;
+        } catch (SQLException e) {
+            System.out.println("Failed to load characters");
+        }
+        return null;
+    }
+
+    public static ArrayList<Mission> getLatestMissions(Connection conn) {
+        try {
+            ArrayList<Mission> missions = new ArrayList<>();
+            String missionsQuery = "SELECT * FROM MISION ORDER BY IDMISION ASC FETCH FIRST 3 ROWS ONLY";
+            PreparedStatement ps = conn.prepareStatement(missionsQuery);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Mission mission = new Mission(
+                        rs.getInt("IDMISION"),
+                        rs.getInt("IDPARTIDA"),
+                        rs.getString("DESCRIPCION"),
+                        rs.getString("RECOMPENSA"),
+                        rs.getString("DIFICULTAD")
+                );
+                missions.add(mission);
+            }
+            ps.close();
+            return missions;
         } catch (SQLException e) {
             System.out.println("Failed to load players");
         }
