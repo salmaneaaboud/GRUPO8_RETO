@@ -1,5 +1,6 @@
 package Main.Presentation;
 
+import Main.Domain.BackgroundPanel;
 import Main.Persistance.Conexion;
 import Main.businessLogic.Authenticator;
 
@@ -22,16 +23,22 @@ public class Main extends JFrame {
         Container mainContainer = frame.getContentPane();
         mainContainer.setLayout(new BorderLayout());
 
+        BackgroundPanel backgroundPanel = new BackgroundPanel("./photos/bgvs/background1.png");
+        backgroundPanel.setLayout(new BorderLayout());
+        mainContainer.add(backgroundPanel);
+
         JPanel northPanel = new JPanel();
+        northPanel.setOpaque(false);
         northPanel.setLayout(new FlowLayout());
         northPanel.add(new JButton("Characters"));
         northPanel.add(new JButton("Ranking"));
         northPanel.add(new JButton("Missions"));
         northPanel.add(new JButton("Regions"));
         northPanel.add(new JButton("News"));
-        mainContainer.add(northPanel, BorderLayout.NORTH);
+        backgroundPanel.add(northPanel, BorderLayout.NORTH);
 
         JPanel southPanel = new JPanel();
+        southPanel.setOpaque(false);
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
         JButton loginButton = new JButton("Log in");
 
@@ -39,11 +46,12 @@ public class Main extends JFrame {
 
         southPanel.add(loginButton);
         southPanel.setPreferredSize(new Dimension(0, 50));
-        mainContainer.add(southPanel, BorderLayout.SOUTH);
+        backgroundPanel.add(southPanel, BorderLayout.SOUTH);
 
         JPanel centerPanel = new JPanel();
+        centerPanel.setOpaque(false);
         centerPanel.setLayout(new GridLayout(2, 5, 10, 10));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         centerPanel.add(createCharacterPanel("Warrior", "Strong and resilient", "./photos/warrior.jfif"));
         centerPanel.add(createCharacterPanel("Archer", "Precise and lethal", "./photos/archer.jfif"));
@@ -56,7 +64,7 @@ public class Main extends JFrame {
         centerPanel.add(createCharacterPanel("Paladin", "Team support", "./photos/paladin.jfif"));
         centerPanel.add(createCharacterPanel("Coming Soon", "Exciting things coming", "./photos/new.jfif"));
 
-        mainContainer.add(centerPanel, BorderLayout.CENTER);
+        backgroundPanel.add(centerPanel, BorderLayout.CENTER);
 
         frame.setVisible(true);
     }
@@ -64,13 +72,14 @@ public class Main extends JFrame {
     public static JPanel createCharacterPanel(String name, String description, String imagePath) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-
+        panel.setOpaque(false);
         ImageIcon icon = new ImageIcon(imagePath);
         JLabel imageLabel = new JLabel(icon);
-        addMouseHoverEffect(imageLabel,icon);
+        addMouseHoverEffect(imageLabel, icon);
         panel.add(imageLabel, BorderLayout.CENTER);
 
         JPanel infoPanel = new JPanel();
+        infoPanel.setOpaque(false);
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         JLabel nameLabel = new JLabel(name);
         JLabel descriptionLabel = new JLabel(description);
@@ -95,4 +104,6 @@ public class Main extends JFrame {
             }
         });
     }
+
+
 }

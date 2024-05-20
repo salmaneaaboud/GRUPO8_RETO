@@ -122,6 +122,27 @@ public class databaseQueries {
         }
     }
 
+    public static ArrayList<Guild> getGuilds(Connection conn){
+        try {
+            ArrayList<Guild> guilds = new ArrayList<>();
+            String guildQuery = "SELECT IDGREMIO,NOMBRE,TIPO,LIDER,IMAGEN FROM GREMIO";
+            PreparedStatement ps = conn.prepareStatement(guildQuery);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                guilds.add(new Guild(rs.getInt("IDGREMIO"),rs.getString("NOMBRE"),rs.getString("TIPO"), rs.getInt("LIDER"), "./photos/guild/"+rs.getString("IMAGEN")));
+            }
+
+            ps.close();
+
+            return guilds;
+        } catch (SQLException e) {
+            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+        }
+        return null;
+    }
+
     public static Guild getUsersGuild(int userId, Connection conn){
         try {
             String guildQuery = "SELECT * FROM GREMIO G INNER JOIN JUGADOR J ON G.IDGREMIO = J.IDGREMIO WHERE J.IDJUGADOR = ?";

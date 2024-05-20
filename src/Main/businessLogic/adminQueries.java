@@ -1,11 +1,13 @@
 package Main.businessLogic;
 
 import Main.Domain.Characters;
+import Main.Domain.Guild;
 import Main.Domain.Player;
 import Main.Persistance.databaseQueries;
 
 import javax.swing.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class adminQueries {
@@ -40,5 +42,20 @@ public class adminQueries {
 
     public static StringBuilder loadUsersMessages(Connection conn) {
         return databaseQueries.getUserMessages(conn);
+    }
+
+    public static JList<String> getGuilds(Connection conn) {
+        ArrayList<Guild> guilds = databaseQueries.getGuilds(conn);
+
+        DefaultListModel<String> userListModel = new DefaultListModel<>();
+
+        if (guilds!=null) {
+            for (Guild guild : guilds) {
+                userListModel.addElement(guild.getGuildName());
+            }
+            return new JList<>(userListModel);
+        }
+
+        return null;
     }
 }
