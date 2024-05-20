@@ -162,4 +162,82 @@ public class databaseQueries {
         }
         return null;
     }
+
+    public static ArrayList<Player> getGuildsPlayer(Connection conn, String guildName){
+        ArrayList<Player> players = new ArrayList<>();
+        try {
+            String guildQuery = "SELECT * FROM JUGADOR J INNER JOIN GREMIO G ON J.IDGREMIO = G.IDGREMIO WHERE G.NOMBRE = ?";
+            PreparedStatement ps = conn.prepareStatement(guildQuery);
+            ps.setString(1, guildName);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Player player = new Player(
+                        rs.getInt("IDJUGADOR"),
+                        rs.getString("RANGO"),
+                        rs.getInt("NIVEL"),
+                        rs.getString("NOMBRE"),
+                        rs.getString("CLAVE"),
+                        rs.getString("EMAIL")
+                );
+                players.add(player);
+            }
+
+            ps.close();
+
+            return players;
+        } catch (SQLException e) {
+            System.out.println("An error occurred while sending the message to support: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static ArrayList<Player> getTopPlayers(Connection conn) {
+        try {
+            ArrayList<Player> topPlayers = new ArrayList<>();
+            String playersQuery = "SELECT * FROM JUGADOR ORDER BY NIVEL DESC FETCH FIRST 5 ROWS ONLY";
+            PreparedStatement ps = conn.prepareStatement(playersQuery);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Player player = new Player(
+                        rs.getInt("IDJUGADOR"),
+                        rs.getString("RANGO"),
+                        rs.getInt("NIVEL"),
+                        rs.getString("NOMBRE"),
+                        rs.getString("CLAVE"),
+                        rs.getString("EMAIL")
+                );
+                topPlayers.add(player);
+            }
+            ps.close();
+            return topPlayers;
+        } catch (SQLException e) {
+            System.out.println("Failed to load players");
+        }
+        return null;
+    }
+
+    public static ArrayList<Characters> getTopCharacters(Connection conn) {
+        try {
+            ArrayList<Characters> topCharacters = new ArrayList<>();
+            String playersQuery = "SELECT * FROM PERSONAJE ORDER BY PUNTOSVALOR DESC FETCH FIRST 5 ROWS ONLY";
+            PreparedStatement ps = conn.prepareStatement(playersQuery);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Characters character = new Characters(
+                        rs.getString("NOMBRE"),
+                        rs.getInt("NIVEL"),
+                        rs.getString("TIPO"),
+                        "./photos/"+rs.getString("IMAGEN")
+                );
+                topCharacters.add(character);
+            }
+            ps.close();
+            return topCharacters;
+        } catch (SQLException e) {
+            System.out.println("Failed to load players");
+        }
+        return null;
+    }
 }

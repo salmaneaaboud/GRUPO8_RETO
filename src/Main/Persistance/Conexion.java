@@ -8,7 +8,7 @@ public class Conexion {
     Connection connection;
     String usuario = "videojuegosdb";
     String password = "zubiri";
-    String url = "jdbc:oracle:thin:@10.14.4.139:1521:orclcdb";
+    String url = "jdbc:oracle:thin:@localhost:1521:xe";
 
     public Conexion(){}
 

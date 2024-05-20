@@ -49,7 +49,7 @@ public class adminQueries {
 
         DefaultListModel<String> userListModel = new DefaultListModel<>();
 
-        if (guilds!=null) {
+        if (guilds != null) {
             for (Guild guild : guilds) {
                 userListModel.addElement(guild.getGuildName());
             }
@@ -57,5 +57,26 @@ public class adminQueries {
         }
 
         return null;
+    }
+
+    public static void createGuildPlayersListPanel(JList<String> charactersList, String guild, Connection conn) {
+        ArrayList<Player> guildPlayers = databaseQueries.getGuildsPlayer(conn,guild);
+        DefaultListModel<String> userListModel = new DefaultListModel<>();
+        charactersList.setModel(userListModel);
+
+        if (guildPlayers != null) {
+            for (Player player : guildPlayers) {
+                userListModel.addElement(player.getName());
+            }
+            new JList<>(userListModel);
+        }
+    }
+
+    public static ArrayList<Player> getTopPlayers(Connection conn) {
+        return databaseQueries.getTopPlayers(conn);
+    }
+
+    public static ArrayList<Characters> getTopCharacters(Connection conn) {
+        return databaseQueries.getTopCharacters(conn);
     }
 }

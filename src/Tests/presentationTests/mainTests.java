@@ -12,7 +12,7 @@ public class mainTests {
     @BeforeEach
     @Test
     void createCharacterPanelTest() {
-        JPanel panel = Main.createCharacterPanel("Warrior", "Strong and resilient", "./photos/warrior.jfif");
+        JPanel panel = Main.createCharaterBox("Warrior", "Strong and resilient", "./photos/warrior.jfif");
         assertNotNull(panel);
         assertEquals(2, panel.getComponentCount());
     }
