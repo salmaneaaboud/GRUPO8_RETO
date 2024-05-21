@@ -18,6 +18,7 @@ public class Authenticator {
     public static int authenticateUser(String username, String password, Connection conn) {
         List<Player> players = databaseQueries.loadPlayersFromDatabase(conn);
 
+        assert players != null;
         for (Player player : players) {
             if (player.getName().equals(username) && player.getPassword().equals(password)) {
                 saveUsername = player.getName();

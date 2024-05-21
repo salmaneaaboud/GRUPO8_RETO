@@ -5,10 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexion {
-    Connection connection;
-    String usuario = "videojuegosdb";
-    String password = "zubiri";
-    String url = "jdbc:oracle:thin:@10.14.4.139:1521:orclcdb";
+    private Connection connection;
+    private String usuario = "videojuegosdb";
+    private String password = "zubiri";
+    private String url = "jdbc:oracle:thin:@10.14.4.139:1521:orclcdb";
 
     public Conexion(){}
 
