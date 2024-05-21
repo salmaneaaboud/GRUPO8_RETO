@@ -1,11 +1,11 @@
 package Main.Presentation;
 
-import Main.Domain.*;
 import Exceptions.UserNotFoundException;
+import Main.Domain.*;
 import Main.businessLogic.userQueries;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class UserWindow extends JFrame {
     }
 
     public void createUserPanel() {
-        JFrame frame = new JFrame("Main.Presentation.Main Application");
+        JFrame frame = new JFrame("User's Window");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
 
@@ -215,65 +215,68 @@ public class UserWindow extends JFrame {
 
     public void showRegionsPanel() {
         Main.resetCenterPanel(centerPanel);
-        CardLayout cardLayout = new CardLayout();
-        centerPanel.setLayout(cardLayout);
+        centerPanel.setLayout(new BorderLayout());
+
+        JPanel regionsContainer = new JPanel();
+        regionsContainer.setLayout(new BoxLayout(regionsContainer, BoxLayout.Y_AXIS));
 
         List<Region> regions = userQueries.getRegions(conn);
         if (regions != null) {
             for (Region region : regions) {
                 JPanel regionPanel = new JPanel(new BorderLayout());
                 regionPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
                 regionPanel.setBackground(new Color(227, 182, 135));
-                regionPanel.setPreferredSize(new Dimension(300, 400));
+                regionPanel.setMaximumSize(new Dimension(600, 400));
 
-                JLabel nameLabel = new JLabel("Region: " + region.getName());
+                JLabel nameLabel = new JLabel("  Region: " + region.getName());
                 nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
-                JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                JPanel titlePanel = new JPanel(new BorderLayout());
                 titlePanel.setBackground(new Color(227, 182, 135));
-                titlePanel.add(nameLabel);
+                titlePanel.add(nameLabel, BorderLayout.WEST);
                 regionPanel.add(titlePanel, BorderLayout.NORTH);
 
-                JPanel infoPanel = new JPanel(new GridLayout(3, 1));
+                JPanel infoPanel = new JPanel(new GridBagLayout());
                 infoPanel.setBackground(new Color(227, 182, 135));
                 infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-                JLabel descriptionLabel = new JLabel("Description: " + region.getDescription());
-                descriptionLabel.setFont(new Font("Arial",Font.PLAIN,18));
-                JLabel recommendationLabel = new JLabel("Recommendation: " + region.getRecommendation());
-                recommendationLabel.setFont(new Font("Arial",Font.PLAIN,18));
-                infoPanel.add(descriptionLabel);
-                infoPanel.add(recommendationLabel);
+
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1.0;
+
+                JLabel descriptionLabel = new JLabel("<html>Description: " + region.getDescription() + "</html>");
+                descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+                infoPanel.add(descriptionLabel, gbc);
+
+                gbc.gridy++;
+                JLabel recommendationLabel = new JLabel("<html>Recommendation: " + region.getRecommendation() + "</html>");
+                recommendationLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+                infoPanel.add(recommendationLabel, gbc);
+
                 regionPanel.add(infoPanel, BorderLayout.CENTER);
 
                 ImageIcon originalIcon = new ImageIcon(region.getImage());
-                Image scaledImage = originalIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+                Image scaledImage = originalIcon.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
                 JLabel imageLabel = new JLabel(scaledIcon);
-                regionPanel.add(imageLabel, BorderLayout.SOUTH);
+                imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                JPanel imagePanel = new JPanel();
+                imagePanel.setBackground(new Color(227, 182, 135));
+                imagePanel.add(imageLabel);
+                regionPanel.add(imagePanel, BorderLayout.SOUTH);
 
-                centerPanel.add(regionPanel, region.getName());
+                regionsContainer.add(regionPanel);
+                regionsContainer.add(Box.createRigidArea(new Dimension(0, 20)));
             }
         }
 
-        JPanel navigationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton prevButton = new JButton("Previous");
-        JButton nextButton = new JButton("Next");
-
-        prevButton.addActionListener(e -> cardLayout.previous(centerPanel));
-        nextButton.addActionListener(e -> cardLayout.next(centerPanel));
-
-        navigationPanel.add(prevButton);
-        navigationPanel.add(nextButton);
-        navigationPanel.setOpaque(false);
-        navigationPanel.setPreferredSize(new Dimension(400, 50));
-
-        backgroundPanel.add(navigationPanel, BorderLayout.SOUTH);
+        JScrollPane scrollPane = new JScrollPane(regionsContainer);
+        centerPanel.add(scrollPane, BorderLayout.CENTER);
     }
-
 
     public JPanel getCenterPanel() {
         return centerPanel;
     }
-
 
 }

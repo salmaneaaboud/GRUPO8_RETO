@@ -23,7 +23,7 @@ public class AdminWindow extends JFrame {
     }
 
     public void createAdminPanel() {
-        JFrame frame = new JFrame("Main Application");
+        JFrame frame = new JFrame("Admin Window");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
 
