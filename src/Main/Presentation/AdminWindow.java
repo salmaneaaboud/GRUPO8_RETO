@@ -12,16 +12,34 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Class representing the administration window of the application.
+ * Allows administrators to manage users, guilds, advanced statistics, and support messages.
+ */
 public class AdminWindow extends JFrame {
+    /**
+     * Connection to the database used by the administration window.
+     */
     private final Connection conn;
 
+    /**
+     * Central panel of the administration window.
+     */
     private JPanel centerPanel;
 
+    /**
+     * Creates a new instance of AdminWindow.
+     *
+     * @param connection Connection to the database.
+     */
     public AdminWindow(Connection connection) {
         this.conn = connection;
         createAdminPanel();
     }
 
+    /**
+     * Creates the administration panel with its components and functionalities.
+     */
     public void createAdminPanel() {
         JFrame frame = new JFrame("Admin Window");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,6 +93,9 @@ public class AdminWindow extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * Displays support messages in a modal window.
+     */
     public void showSupportMessages() {
         JFrame supportMessagesFrame = new JFrame("Support Messages");
         supportMessagesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -93,6 +114,9 @@ public class AdminWindow extends JFrame {
         supportMessagesFrame.setVisible(true);
     }
 
+    /**
+     * Opens the user management window.
+     */
     public void openUserManagement() {
         Main.resetCenterPanel(centerPanel);
 
@@ -114,6 +138,9 @@ public class AdminWindow extends JFrame {
         centerPanel.setOpaque(true);
     }
 
+    /**
+     * Opens the guild management window.
+     */
     public void openGuildManagement() {
         Main.resetCenterPanel(centerPanel);
 
@@ -135,6 +162,17 @@ public class AdminWindow extends JFrame {
         centerPanel.setOpaque(true);
     }
 
+    /**
+     * Creates a JButton with the specified text and ActionListener.
+     * If an ActionListener is provided, it is added to the button.
+     * If no ActionListener is provided, a default ActionListener is added
+     * to show a "Coming Soon" message dialog when the button is clicked.
+     *
+     * @param buttonText The text to be displayed on the button.
+     * @param actionListener The ActionListener to be added to the button.
+     *                       If null, a default ActionListener is added.
+     * @return The created JButton with the specified text and ActionListener.
+     */
     private JButton createButtonWithListener(String buttonText, ActionListener actionListener) {
         JButton button = Main.createCustomButton(buttonText);
         if (actionListener != null) {
@@ -145,6 +183,9 @@ public class AdminWindow extends JFrame {
         return button;
     }
 
+    /**
+     * Creates and displays advanced statistics in the window.
+     */
     public void openAdvancedStatistics() {
         Main.resetCenterPanel(centerPanel);
 
@@ -178,13 +219,12 @@ public class AdminWindow extends JFrame {
         centerPanel.add(rankingsPanel);
     }
 
+    /**
+     * Returns the connection to the database.
+     *
+     * @return The connection to the database.
+     */
     public Connection getConnection() {
         return conn;
-    }
-
-    public static void main(String[] args) {
-        Conexion conexion = new Conexion();
-        Connection conn = conexion.conectar();
-        AdminWindow a = new AdminWindow(conn);
     }
 }

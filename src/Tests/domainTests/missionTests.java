@@ -6,8 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the Mission class.
+ */
 public class missionTests {
 
+    /**
+     * Test the constructor and getters of the Mission class.
+     */
     @Test
     @Order(1)
     public void testConstructorAndGetters() {
@@ -20,6 +26,9 @@ public class missionTests {
         assertEquals("Hard", mission.getDifficulty());
     }
 
+    /**
+     * Test the toString() method of the Mission class.
+     */
     @Test
     @Order(2)
     public void testToString() {

@@ -6,8 +6,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The databaseQueries class contains methods for querying the database.
+ */
 public class databaseQueries {
 
+    /**
+     * Retrieves characters belonging to a player by their name.
+     *
+     * @param playerName the name of the player
+     * @param conn       the database connection
+     * @return a list of Characters belonging to the player
+     */
     public static List<Characters> getCharactersByPlayerName(String playerName, Connection conn) {
         try {
             if (conn == null) {
@@ -38,7 +48,13 @@ public class databaseQueries {
         return null;
     }
 
-    public static StringBuilder getUserMessages(Connection conn){
+    /**
+     * Retrieves user messages from the database.
+     *
+     * @param conn the database connection
+     * @return a StringBuilder containing user messages
+     */
+    public static StringBuilder getUserMessages(Connection conn) {
         StringBuilder messages = new StringBuilder();
         try {
             String query = "SELECT * FROM mensajes_soporte";
@@ -56,6 +72,12 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Loads players from the database.
+     *
+     * @param conn the database connection
+     * @return a list of loaded Player objects
+     */
     public static List<Player> loadPlayersFromDatabase(Connection conn) {
         List<Player> players = new ArrayList<>();
         try {
@@ -81,6 +103,13 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Retrieves user messages from the database for a specific player.
+     *
+     * @param player the player whose messages to retrieve
+     * @param conn   the database connection
+     * @return a StringBuilder containing the user messages
+     */
     public static StringBuilder showUserMessages(Player player, Connection conn){
         int playerId = player.getPlayerId();
 
@@ -105,6 +134,13 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Inserts a user message into the database.
+     *
+     * @param userId  the ID of the user sending the message
+     * @param message the message to be inserted
+     * @param conn    the database connection
+     */
     public static void insertUserMessage(int userId, String message, Connection conn){
         try {
             String insertQuery = "INSERT INTO mensajes_soporte (IdJugador, mensaje) VALUES (?, ?)";
@@ -120,6 +156,12 @@ public class databaseQueries {
         }
     }
 
+    /**
+     * Retrieves all guilds from the database.
+     *
+     * @param conn the database connection
+     * @return an ArrayList of Guild objects representing all guilds
+     */
     public static ArrayList<Guild> getGuilds(Connection conn){
         try {
             ArrayList<Guild> guilds = new ArrayList<>();
@@ -141,6 +183,13 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Retrieves the guild of a specific user.
+     *
+     * @param userId the ID of the user
+     * @param conn   the database connection
+     * @return the Guild object representing the user's guild
+     */
     public static Guild getUsersGuild(int userId, Connection conn){
         try {
             String guildQuery = "SELECT * FROM GREMIO G INNER JOIN JUGADOR J ON G.IDGREMIO = J.IDGREMIO WHERE J.IDJUGADOR = ?";
@@ -161,6 +210,13 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Retrieves players belonging to a specific guild.
+     *
+     * @param conn      the database connection
+     * @param guildName the name of the guild
+     * @return an ArrayList of Player objects belonging to the guild
+     */
     public static ArrayList<Player> getGuildsPlayer(Connection conn, String guildName){
         ArrayList<Player> players = new ArrayList<>();
         try {
@@ -191,6 +247,12 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Retrieves the top players based on their level.
+     *
+     * @param conn the database connection
+     * @return an ArrayList of Player objects representing the top players
+     */
     public static ArrayList<Player> getTopPlayers(Connection conn) {
         try {
             ArrayList<Player> topPlayers = new ArrayList<>();
@@ -216,6 +278,12 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Retrieves the top characters based on their points value.
+     *
+     * @param conn the database connection
+     * @return an ArrayList of Characters objects representing the top characters
+     */
     public static ArrayList<Characters> getTopCharacters(Connection conn) {
         try {
             ArrayList<Characters> topCharacters = new ArrayList<>();
@@ -239,6 +307,12 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Retrieves the latest missions from the database.
+     *
+     * @param conn the database connection
+     * @return an ArrayList of Mission objects representing the latest missions
+     */
     public static ArrayList<Mission> getLatestMissions(Connection conn) {
         try {
             ArrayList<Mission> missions = new ArrayList<>();
@@ -263,6 +337,12 @@ public class databaseQueries {
         return null;
     }
 
+    /**
+     * Retrieves the regions from the database.
+     *
+     * @param conn the database connection
+     * @return an ArrayList of Region objects representing the regions
+     */
     public static ArrayList<Region> getRegions(Connection conn) {
         try {
             ArrayList<Region> regions = new ArrayList<>();

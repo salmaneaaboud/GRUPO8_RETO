@@ -12,18 +12,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents the window for a user, providing access to various functionalities
+ * such as viewing characters, messages, ranking, missions, regions, and guilds.
+ */
 public class UserWindow extends JFrame {
+    /**
+     * The connection to the database.
+     */
     private final Connection conn;
+    /**
+     * The username of the current user.
+     */
     private final String saveUsername;
+    /**
+     * The central panel of the window.
+     */
     private JPanel centerPanel;
+    /**
+     * The background panel of the window.
+     */
     private BackgroundPanel backgroundPanel;
 
+    /**
+     * Constructs a new UserWindow with the specified connection and username.
+     *
+     * @param connection   The connection to the database.
+     * @param saveUsername The username of the current user.
+     */
     public UserWindow(Connection connection, String saveUsername) {
         this.conn = connection;
         this.saveUsername = saveUsername;
         createUserPanel();
     }
 
+    /**
+     * Creates the user panel with various functionalities.
+     */
     public void createUserPanel() {
         JFrame frame = new JFrame("User's Window");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,12 +109,22 @@ public class UserWindow extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * Creates a button with the specified text and action listener.
+     * If the action listener is null, a default action is set to display a message dialog.
+     * @param buttonText The text displayed on the button.
+     * @param actionListener The action listener associated with the button.
+     * @return The created button.
+     */
     private JButton createButtonWithListener(String buttonText, ActionListener actionListener) {
         JButton button = Main.createCustomButton(buttonText);
         button.addActionListener(Objects.requireNonNullElseGet(actionListener, () -> e -> JOptionPane.showMessageDialog(null, "Coming Soon")));
         return button;
     }
 
+    /**
+     * Displays the support form for the user to send messages to support.
+     */
     private void showSupportForm() {
         JFrame supportFrame = new JFrame("Support");
         supportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -122,6 +157,9 @@ public class UserWindow extends JFrame {
         supportFrame.setVisible(true);
     }
 
+    /**
+     * Displays the character panel with the user's characters.
+     */
     public void showCharacterPanel() {
         Main.resetCenterPanel(centerPanel);
         List<Characters> characters = userQueries.usersCharacters(saveUsername,conn);
@@ -133,6 +171,9 @@ public class UserWindow extends JFrame {
         backgroundPanel.add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Displays the missions panel with the latest missions.
+     */
     public void showMissionsPanel() {
         Main.resetCenterPanel(centerPanel);
         centerPanel.setLayout(new GridLayout(0, 1, 10, 10));
@@ -162,6 +203,10 @@ public class UserWindow extends JFrame {
         backgroundPanel.add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates and displays the guild panel for the user.
+     * If the user is not part of any guild, an exception is thrown.
+     */
     public void createGuildPanel() {
         Main.resetCenterPanel(centerPanel);
         try {
@@ -213,6 +258,9 @@ public class UserWindow extends JFrame {
         }
     }
 
+    /**
+     * Displays the regions panel with information about different regions.
+     */
     public void showRegionsPanel() {
         Main.resetCenterPanel(centerPanel);
         centerPanel.setLayout(new BorderLayout());
@@ -275,6 +323,11 @@ public class UserWindow extends JFrame {
         centerPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Retrieves the center panel of the user window.
+     *
+     * @return The center panel of the user window.
+     */
     public JPanel getCenterPanel() {
         return centerPanel;
     }

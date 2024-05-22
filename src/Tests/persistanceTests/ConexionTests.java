@@ -11,14 +11,25 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the Conexion class.
+ */
 class ConexionTests {
     private Conexion conexion;
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         conexion = new Conexion();
     }
 
+    /**
+     * Test the conectar method of the Conexion class.
+     *
+     * @throws SQLException if a database access error occurs or the url is null
+     */
     @Test
     @DisplayName("Connection")
     @Tag("Controlador")
@@ -28,6 +39,9 @@ class ConexionTests {
         assertTrue(connection.isValid(5));
     }
 
+    /**
+     * Test the desconectar method of the Conexion class.
+     */
     @Test
     void testDesconectar() {
         Connection conn = conexion.conectar();
@@ -37,6 +51,9 @@ class ConexionTests {
         assertThrows(SQLException.class, () -> conn.createStatement().executeQuery("SELECT 1 FROM DUAL"), "Connection should be closed and executing query should throw SQLException");
     }
 
+    /**
+     * Test the desconectar method of the Conexion class when handling SQLException.
+     */
     @Test
     void desconectar_HandleSQLException() {
         assertThrows(RuntimeException.class, () -> {
@@ -44,6 +61,9 @@ class ConexionTests {
         });
     }
 
+    /**
+     * Test the getters and setters of the Conexion class.
+     */
     @Test
     void testGettersAndSetters() {
         String testUrl = "jdbc:oracle:thin:@localhost:3306:test";

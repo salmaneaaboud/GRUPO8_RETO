@@ -5,7 +5,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for the Region class.
+ */
 public class regionTests {
+
+    /**
+     * Test the equals method of the Region class.
+     */
     @Test
     @Order(1)
     public void testEquals() {
@@ -20,6 +27,9 @@ public class regionTests {
         Assertions.assertEquals(region1, region1);
     }
 
+    /**
+     * Test the hashCode method of the Region class.
+     */
     @Test
     @Order(2)
     public void testHashCode() {
@@ -31,6 +41,9 @@ public class regionTests {
         Assertions.assertNotEquals(region1.hashCode(), region3.hashCode());
     }
 
+    /**
+     * Test the toString method of the Region class.
+     */
     @Test
     @Order(3)
     public void testToString() {
@@ -40,6 +53,9 @@ public class regionTests {
         Assertions.assertEquals(expectedToString, region.toString());
     }
 
+    /**
+     * Test the getters and setters of the Region class.
+     */
     @Test
     @Order(4)
     public void testGettersAndSetters() {
@@ -58,6 +74,9 @@ public class regionTests {
         Assertions.assertEquals("south.jpg", region.getImage());
     }
 
+    /**
+     * Test the equals method with a different type.
+     */
     @Test
     @Order(5)
     public void testEqualsWithDifferentType() {
@@ -65,6 +84,9 @@ public class regionTests {
         Assertions.assertNotEquals(region, "Not a Region object");
     }
 
+    /**
+     * Test the equals method with null.
+     */
     @Test
     @Order(6)
     public void testEqualsWithNull() {
@@ -72,6 +94,9 @@ public class regionTests {
         Assertions.assertNotEquals(region, null);
     }
 
+    /**
+     * Test the equals method with itself.
+     */
     @Test
     @Order(7)
     public void testEqualsWithItself() {
@@ -79,6 +104,9 @@ public class regionTests {
         Assertions.assertEquals(region, region);
     }
 
+    /**
+     * Test the consistency of hashCode.
+     */
     @Test
     @Order(8)
     public void testHashCodeConsistency() {

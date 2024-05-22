@@ -7,16 +7,23 @@ import org.junit.jupiter.api.*;
 
 import javax.swing.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Unit tests for the UserWindow class.
+ */
 class userWindowTests {
 
     private Connection connection;
     private UserWindow userWindow;
 
+    /**
+     * Setup method to initialize the connection and user window.
+     */
     @BeforeEach
     void setUp() {
         Conexion conexion = new Conexion();
@@ -24,7 +31,9 @@ class userWindowTests {
         userWindow = new UserWindow(connection, "IceNinja23");
     }
 
-
+    /**
+     * Tear down method to close the connection.
+     */
     @AfterEach
     void tearDown() {
         try {
@@ -36,11 +45,17 @@ class userWindowTests {
         }
     }
 
+    /**
+     * Tests the creation of the user panel.
+     */
     @Test
     void createUserPanelTest() {
         assertNotNull(userWindow);
     }
 
+    /**
+     * Tests the display of the character panel.
+     */
     @Test
     void showCharacterPanelTest() {
         userWindow.showCharacterPanel();
@@ -48,6 +63,9 @@ class userWindowTests {
         assertTrue(components.length > 0);
     }
 
+    /**
+     * Tests the creation of the guild panel.
+     */
     @Test
     void createGuildPanelTest() {
         userWindow.createGuildPanel();
@@ -55,6 +73,9 @@ class userWindowTests {
         assertTrue(components.length > 0);
     }
 
+    /**
+     * Tests the display of the missions panel.
+     */
     @Test
     void showMissionsPanelTest() {
         userWindow.showMissionsPanel();
@@ -63,6 +84,9 @@ class userWindowTests {
         assertTrue(components[0] instanceof JPanel);
     }
 
+    /**
+     * Tests the display of the regions panel.
+     */
     @Test
     void showRegionsPanelTest() {
         userWindow.showRegionsPanel();
@@ -71,6 +95,9 @@ class userWindowTests {
         assertTrue(components[0] instanceof JScrollPane);
     }
 
+    /**
+     * Tests the support button functionality.
+     */
     @Test
     void supportButtonTest() {
         JButton supportButton = findButtonWithText("Support");
@@ -91,6 +118,12 @@ class userWindowTests {
         assertTrue(supportWindowOpened);
     }
 
+    /**
+     * Helper method to find a button with a specific text within the user window.
+     *
+     * @param text The text of the button to find.
+     * @return The button found, or null if not found.
+     */
     private JButton findButtonWithText(String text) {
         Component[] components = userWindow.getContentPane().getComponents();
         for (Component component : components) {
@@ -115,7 +148,4 @@ class userWindowTests {
         }
         return null;
     }
-
-
-
 }

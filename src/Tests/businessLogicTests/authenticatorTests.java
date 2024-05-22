@@ -12,15 +12,24 @@ import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Authenticator class.
+ */
 public class authenticatorTests {
 
     private static Connection conn;
 
+    /**
+     * Establishes a connection to the database before running the tests.
+     */
     @BeforeAll
     static void setup() {
         conn = new Conexion().conectar();
     }
 
+    /**
+     * Closes the connection to the database after running all the tests.
+     */
     @AfterAll
     static void disconnect() {
         try {
@@ -32,6 +41,9 @@ public class authenticatorTests {
         }
     }
 
+    /**
+     * Tests authentication of a valid user.
+     */
     @Test
     @Order(1)
     public void testAuthenticateUser_ValidUser_ReturnsUserType() {
@@ -43,6 +55,9 @@ public class authenticatorTests {
         assertEquals(0, userType);
     }
 
+    /**
+     * Tests authentication of a valid admin.
+     */
     @Test
     @Order(2)
     public void testAuthenticateUser_ValidAdmin_ReturnsAdminType() {
@@ -54,6 +69,9 @@ public class authenticatorTests {
         assertEquals(1, userType);
     }
 
+    /**
+     * Tests authentication of an invalid user.
+     */
     @Test
     @Order(3)
     public void testAuthenticateUser_InvalidUser_ReturnsErrorType() {
@@ -65,6 +83,9 @@ public class authenticatorTests {
         assertEquals(-1, userType);
     }
 
+    /**
+     * Tests authentication of an invalid admin.
+     */
     @Test
     @Order(4)
     public void testAuthenticateUser_InvalidAdmin_ReturnsErrorType() {
@@ -76,6 +97,9 @@ public class authenticatorTests {
         assertEquals(-1, userType);
     }
 
+    /**
+     * Tests authentication with empty username and password.
+     */
     @Test
     @Order(5)
     public void testAuthenticateUser_EmptyUsernamePassword_ReturnsErrorType() {
@@ -87,6 +111,9 @@ public class authenticatorTests {
         assertEquals(-1, userType);
     }
 
+    /**
+     * Tests authentication of a non-existent user.
+     */
     @Test
     @Order(6)
     public void testAuthenticateUser_NonExistentUser_ReturnsErrorType() {
@@ -98,6 +125,9 @@ public class authenticatorTests {
         assertEquals(-1, userType);
     }
 
+    /**
+     * Tests showing the login form after successful authentication.
+     */
     @Test
     @Order(7)
     public void testShowLoginForm_ValidAuthentication_SuccessfulLogin() {
@@ -109,6 +139,4 @@ public class authenticatorTests {
 
         assertFalse(parentFrame.isVisible());
     }
-
-
 }

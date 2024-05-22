@@ -9,8 +9,14 @@ import java.awt.image.BufferedImage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the BackgroundPanel class.
+ */
 public class BackgroundPanelTests {
 
+    /**
+     * Tests loading a background image.
+     */
     @Test
     public void testBackgroundImageLoading() {
         String filePath = "path/to/test/image.jpg";
@@ -19,6 +25,9 @@ public class BackgroundPanelTests {
         assertNotNull(panel.getBackgroundImage(), "The background image should not be null.");
     }
 
+    /**
+     * Tests painting the component onto a BufferedImage.
+     */
     @Test
     public void testPaintComponent() {
         String filePath = "path/to/test/image.jpg";

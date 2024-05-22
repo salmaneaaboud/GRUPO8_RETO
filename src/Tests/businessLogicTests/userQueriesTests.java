@@ -12,15 +12,24 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the userQueries class.
+ */
 public class userQueriesTests {
 
     private static Connection conn;
 
+    /**
+     * Establishes a connection to the database before running the tests.
+     */
     @BeforeAll
     static void setup() {
         conn = new Conexion().conectar();
     }
 
+    /**
+     * Closes the connection to the database after running all the tests.
+     */
     @AfterAll
     static void disconnect() {
         try {
@@ -32,6 +41,9 @@ public class userQueriesTests {
         }
     }
 
+    /**
+     * Tests showing messages for an existing user.
+     */
     @Test
     @Order(1)
     public void testShowUserMessages_UserExists_ShowMessages() {
@@ -40,6 +52,9 @@ public class userQueriesTests {
         assertDoesNotThrow(() -> userQueries.showUserMessages(username, conn));
     }
 
+    /**
+     * Tests showing messages for a non-existing user.
+     */
     @Test
     @Order(2)
     public void testShowUserMessages_UserDoesNotExist_ShowErrorMessage() {
@@ -48,6 +63,9 @@ public class userQueriesTests {
         assertThrows(Exception.class, () -> userQueries.showUserMessages(username, conn));
     }
 
+    /**
+     * Tests getting a user by username for an existing user.
+     */
     @Test
     @Order(3)
     public void testGetUserByUsername_UserExists_ReturnsPlayer() {
@@ -59,6 +77,9 @@ public class userQueriesTests {
         assertEquals(username, result.getName());
     }
 
+    /**
+     * Tests getting a user by username for a non-existing user.
+     */
     @Test
     @Order(4)
     public void testGetUserByUsername_UserDoesNotExist_ReturnsNull() {
@@ -69,6 +90,9 @@ public class userQueriesTests {
         assertNull(result);
     }
 
+    /**
+     * Tests sending a message to support for an existing user.
+     */
     @Test
     @Order(5)
     public void testSendMessageToSupport_UserExists_MessageInserted() {
@@ -78,6 +102,9 @@ public class userQueriesTests {
         assertDoesNotThrow(() -> userQueries.sendMessageToSupport(message, username, conn));
     }
 
+    /**
+     * Tests sending a message to support for a non-existing user.
+     */
     @Test
     @Order(6)
     public void testSendMessageToSupport_UserNotExists_MessageInserted() {
@@ -87,6 +114,9 @@ public class userQueriesTests {
         assertThrows(Exception.class,() -> userQueries.sendMessageToSupport(message, username, conn));
     }
 
+    /**
+     * Tests getting characters for an existing user.
+     */
     @Test
     @Order(7)
     public void testUsersCharacters_UserExists_ReturnsCharacters() {
