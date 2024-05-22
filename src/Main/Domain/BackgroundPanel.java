@@ -15,7 +15,7 @@ public class BackgroundPanel extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null) {
             Graphics2D g2d = (Graphics2D) g.create();
@@ -23,5 +23,9 @@ public class BackgroundPanel extends JPanel {
             g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             g2d.dispose();
         }
+    }
+
+    public Image getBackgroundImage() {
+        return backgroundImage;
     }
 }
