@@ -245,12 +245,12 @@ public class UserWindow extends JFrame {
                 gbc.gridy = 0;
                 gbc.weightx = 1.0;
 
-                JLabel descriptionLabel = new JLabel("<html>Description: " + region.getDescription() + "</html>");
+                JLabel descriptionLabel = new JLabel("Description: " + region.getDescription());
                 descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 16));
                 infoPanel.add(descriptionLabel, gbc);
 
                 gbc.gridy++;
-                JLabel recommendationLabel = new JLabel("<html>Recommendation: " + region.getRecommendation() + "</html>");
+                JLabel recommendationLabel = new JLabel("Recommendation: " + region.getRecommendation());
                 recommendationLabel.setFont(new Font("Arial", Font.PLAIN, 16));
                 infoPanel.add(recommendationLabel, gbc);
 

@@ -124,4 +124,6 @@ public class adminWindowTests {
 
         assertFalse(testFrame.isVisible(), "Test frame should be closed after logout");
     }
+
+
 }
