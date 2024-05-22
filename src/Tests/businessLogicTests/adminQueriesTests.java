@@ -1,4 +1,5 @@
 package Tests.businessLogicTests;
+
 import Main.Domain.Characters;
 import Main.Domain.Player;
 import Main.Persistance.Conexion;
@@ -12,15 +13,24 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the adminQueries class.
+ */
 public class adminQueriesTests {
 
     private static Connection conn;
 
+    /**
+     * Establishes a connection to the database before running the tests.
+     */
     @BeforeAll
     static void setup() {
         conn = new Conexion().conectar();
     }
 
+    /**
+     * Closes the connection to the database after running all the tests.
+     */
     @AfterAll
     static void disconnect() {
         try {
@@ -32,6 +42,11 @@ public class adminQueriesTests {
         }
     }
 
+    /**
+     * Tests the creation of a user list panel.
+     *
+     * @throws SQLException if a SQL exception occurs.
+     */
     @Test
     @Order(1)
     public void testCreateUserListPanel() throws SQLException {
@@ -43,6 +58,11 @@ public class adminQueriesTests {
         assertEquals("Firestorm99", userList.getModel().getElementAt(1));
     }
 
+    /**
+     * Tests the creation of a character list panel.
+     *
+     * @throws SQLException if a SQL exception occurs.
+     */
     @Test
     @Order(2)
     public void testCreateCharactersListPanel() throws SQLException {
@@ -56,6 +76,11 @@ public class adminQueriesTests {
         assertEquals("Sombra", listModel.getElementAt(2));
     }
 
+    /**
+     * Tests loading user messages.
+     *
+     * @throws SQLException if a SQL exception occurs.
+     */
     @Test
     @Order(3)
     public void testLoadUsersMessages() throws SQLException {
@@ -65,6 +90,11 @@ public class adminQueriesTests {
         assertTrue(result.toString().contains("Test message"), "Messages should contain the test message.");
     }
 
+    /**
+     * Tests retrieving guilds.
+     *
+     * @throws SQLException if a SQL exception occurs.
+     */
     @Test
     @Order(4)
     public void testGetGuilds() throws SQLException {
@@ -76,6 +106,11 @@ public class adminQueriesTests {
         assertEquals("DragonSlayers", guildsList.getModel().getElementAt(1));
     }
 
+    /**
+     * Tests creating a guild players list panel.
+     *
+     * @throws SQLException if a SQL exception occurs.
+     */
     @Test
     @Order(5)
     public void testCreateGuildPlayersListPanel() throws SQLException {
@@ -89,6 +124,11 @@ public class adminQueriesTests {
         assertEquals("delegado33", listModel.getElementAt(2));
     }
 
+    /**
+     * Tests retrieving top players.
+     *
+     * @throws SQLException if a SQL exception occurs.
+     */
     @Test
     @Order(6)
     public void testGetTopPlayers() throws SQLException {
@@ -100,6 +140,11 @@ public class adminQueriesTests {
         assertEquals(100, topPlayers.get(0).getLevel());
     }
 
+    /**
+     * Tests retrieving top characters.
+     *
+     * @throws SQLException if a SQL exception occurs.
+     */
     @Test
     @Order(7)
     public void testGetTopCharacters() throws SQLException {

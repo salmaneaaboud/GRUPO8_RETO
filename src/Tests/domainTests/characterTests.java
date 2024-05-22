@@ -4,7 +4,14 @@ import Main.Domain.Characters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the Characters class.
+ */
 public class characterTests {
+
+    /**
+     * Tests the getName method.
+     */
     @Test
     public void testGetName() {
         Characters character = new Characters("Alice", 5, "Warrior", "warrior.jpg");
@@ -14,6 +21,9 @@ public class characterTests {
         Assertions.assertEquals("Alice", name);
     }
 
+    /**
+     * Tests the setName method.
+     */
     @Test
     public void testSetName() {
         Characters character = new Characters("Bob", 10, "Mage", "mage.jpg");
@@ -23,6 +33,9 @@ public class characterTests {
         Assertions.assertEquals("Charlie", character.getName());
     }
 
+    /**
+     * Tests the getLevel method.
+     */
     @Test
     public void testGetLevel() {
         Characters character = new Characters("David", 15, "Rogue", "rogue.jpg");
@@ -32,6 +45,9 @@ public class characterTests {
         Assertions.assertEquals(15, level);
     }
 
+    /**
+     * Tests the setLevel method.
+     */
     @Test
     public void testSetLevel() {
         Characters character = new Characters("Eve", 20, "Archer", "archer.jpg");
@@ -41,6 +57,9 @@ public class characterTests {
         Assertions.assertEquals(25, character.getLevel());
     }
 
+    /**
+     * Tests the getType method.
+     */
     @Test
     public void testGetType() {
         Characters character = new Characters("Fiona", 30, "Paladin", "paladin.jpg");
@@ -50,6 +69,9 @@ public class characterTests {
         Assertions.assertEquals("Paladin", type);
     }
 
+    /**
+     * Tests the setType method.
+     */
     @Test
     public void testSetType() {
         Characters character = new Characters("George", 35, "Sorcerer", "sorcerer.jpg");
@@ -59,6 +81,9 @@ public class characterTests {
         Assertions.assertEquals("Knight", character.getType());
     }
 
+    /**
+     * Tests the getImage method.
+     */
     @Test
     public void testGetImage() {
         Characters character = new Characters("Helen", 40, "Druid", "druid.jpg");
@@ -68,6 +93,9 @@ public class characterTests {
         Assertions.assertEquals("druid.jpg", image);
     }
 
+    /**
+     * Tests the setImage method.
+     */
     @Test
     public void testSetImage() {
         Characters character = new Characters("Ian", 45, "Barbarian", "barbarian.jpg");

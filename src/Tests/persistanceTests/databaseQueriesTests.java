@@ -11,16 +11,26 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This class contains unit tests for the {@link Main.Persistance.databaseQueries} class.
+ * It covers various functionalities and scenarios to ensure the reliability of the database operations.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class databaseQueriesTests {
 
     private static Connection conn;
 
+    /**
+     * Set up method to establish a database connection before running the tests.
+     */
     @BeforeAll
     static void setup() {
         conn = new Conexion().conectar();
     }
 
+    /**
+     * Tear down method to close the database connection after running all tests.
+     */
     @AfterAll
     static void disconnect() {
         try {
@@ -32,6 +42,9 @@ public class databaseQueriesTests {
         }
     }
 
+    /**
+     * Test to verify the loading of players from the database.
+     */
     @Test
     @Order(1)
     void testLoadPlayersFromDatabase() {
@@ -44,6 +57,9 @@ public class databaseQueriesTests {
         assertEquals("ShadowWarrior87", player.getName(), "Player name should match.");
     }
 
+    /**
+     * Test to verify the retrieval of characters by player name from the database.
+     */
     @Test
     @Order(2)
     void testGetCharactersByPlayerName() {
@@ -55,6 +71,9 @@ public class databaseQueriesTests {
         assertEquals("Gimli", character.getName(), "Character name should match.");
     }
 
+    /**
+     * Test to verify the retrieval of user messages from the database.
+     */
     @Test
     @Order(3)
     void testGetUserMessages() {
@@ -63,6 +82,9 @@ public class databaseQueriesTests {
         assertNotNull(messages, "Messages Stringbuilder should not be null");
     }
 
+    /**
+     * Test to verify the insertion of user messages into the database.
+     */
     @Test
     @Order(4)
     void testInsertUserMessage() {
@@ -73,6 +95,9 @@ public class databaseQueriesTests {
         assertTrue(messages.toString().contains("Test message"), "Messages should contain the test message.");
     }
 
+    /**
+     * Test to verify the retrieval and display of user messages from the database.
+     */
     @Test
     @Order(5)
     void testShowUserMessages() {
@@ -85,6 +110,9 @@ public class databaseQueriesTests {
         assertTrue(messages.toString().contains("Test message"), "Messages should contain the test message.");
     }
 
+    /**
+     * Test to verify the handling of null connection when retrieving characters by player name.
+     */
     @Test
     @Order(6)
     void testGetCharactersByPlayerName_NullConnection() {
@@ -93,6 +121,9 @@ public class databaseQueriesTests {
         });
     }
 
+    /**
+     * Test to verify the handling of SQLException when retrieving user messages.
+     */
     @Test
     @Order(7)
     void testGetUserMessages_HandleSQLException() {
@@ -101,6 +132,9 @@ public class databaseQueriesTests {
         });
     }
 
+    /**
+     * Test to verify the handling of SQLException when inserting user messages.
+     */
     @Test
     @Order(8)
     void testInsertUserMessage_HandleSQLException() {
@@ -109,6 +143,9 @@ public class databaseQueriesTests {
         });
     }
 
+    /**
+     * Test to verify the handling of SQLException when displaying user messages.
+     */
     @Test
     @Order(9)
     void testShowUserMessages_HandleSQLException() {
@@ -118,6 +155,9 @@ public class databaseQueriesTests {
         });
     }
 
+    /**
+     * Test to verify the retrieval of guilds from the database.
+     */
     @Test
     @Order(10)
     void testGetGuilds() {
@@ -130,6 +170,9 @@ public class databaseQueriesTests {
         assertEquals("The Knights of Light", guild.getGuildName(), "Guild name should match.");
     }
 
+    /**
+     * Test to verify the retrieval of a user's guild from the database.
+     */
     @Test
     @Order(11)
     void testGetUsersGuild() {
@@ -139,6 +182,9 @@ public class databaseQueriesTests {
         assertEquals("The Dark Renegades", guild.getGuildName(), "Guild name should match.");
     }
 
+    /**
+     * Test to verify the retrieval of top players from the database.
+     */
     @Test
     @Order(13)
     void testGetTopPlayers() {
@@ -150,6 +196,9 @@ public class databaseQueriesTests {
         assertTrue(player.getLevel() >= 1, "Player level should be greater than or equal to 1.");
     }
 
+    /**
+     * Test to verify the retrieval of top characters from the database.
+     */
     @Test
     @Order(14)
     void testGetTopCharacters() {
@@ -161,6 +210,9 @@ public class databaseQueriesTests {
         assertTrue(character.getLevel() >= 1, "Character level should be greater than or equal to 1.");
     }
 
+    /**
+     * Test to verify the retrieval of the latest missions from the database.
+     */
     @Test
     @Order(15)
     void testGetLatestMissions() {
@@ -172,6 +224,9 @@ public class databaseQueriesTests {
         assertEquals("Easy", mission.getDifficulty(), "Mission difficulty should match.");
     }
 
+    /**
+     * Test to verify the retrieval of regions from the database.
+     */
     @Test
     @Order(16)
     void testGetRegions() {

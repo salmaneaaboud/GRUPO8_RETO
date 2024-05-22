@@ -7,8 +7,14 @@ import javax.swing.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Main class.
+ */
 public class mainTests {
 
+    /**
+     * Tests the creation of a character panel.
+     */
     @BeforeEach
     @Test
     void createCharacterPanelTest() {
@@ -17,6 +23,9 @@ public class mainTests {
         assertEquals(2, panel.getComponentCount());
     }
 
+    /**
+     * Tests the addition of a mouse hover effect to a label.
+     */
     @AfterEach
     @Test
     void addMouseHoverEffectTest() {
@@ -33,21 +42,27 @@ public class mainTests {
         assertEquals(icon, label.getIcon());
     }
 
+    /**
+     * Tests the main method.
+     */
     @Test
     void mainTest() {
         try {
             Main.main(null);
         } catch (Exception e) {
-            fail("El método main lanzó una excepción: " + e.getMessage());
+            fail("The main method threw an exception: " + e.getMessage());
         }
     }
 
+    /**
+     * Tests the creation and showing of the GUI.
+     */
     @Test
     void createAndShowGUITest() {
         try {
             Main.createAndShowGUI();
         } catch (Exception e) {
-            fail("El método createAndShowGUI lanzó una excepción: " + e.getMessage());
+            fail("The createAndShowGUI method threw an exception: " + e.getMessage());
         }
     }
 }
