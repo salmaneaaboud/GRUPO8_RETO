@@ -9,9 +9,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+/**
+ * Tests for the Guild class.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class guildTests {
 
+    /**
+     * Test to verify the equals() method.
+     */
     @Test
     @Order(1)
     public void testEquals() {
@@ -23,6 +29,9 @@ public class guildTests {
         assertNotEquals(guild1, guild3);
     }
 
+    /**
+     * Test to verify the hashCode() method.
+     */
     @Test
     @Order(2)
     public void testHashCode() {
@@ -34,6 +43,9 @@ public class guildTests {
         assertNotEquals(guild1.hashCode(), guild3.hashCode());
     }
 
+    /**
+     * Test to verify the toString() method.
+     */
     @Test
     @Order(3)
     public void testToString() {
@@ -43,6 +55,9 @@ public class guildTests {
         assertEquals(expectedToString, guild.toString());
     }
 
+    /**
+     * Test to verify the getters and setters methods.
+     */
     @Test
     @Order(4)
     public void testGettersAndSetters() {

@@ -2,8 +2,10 @@ package Main.Domain;
 
 import javax.swing.*;
 import java.awt.*;
+
 /**
- * A JPanel subclass that displays a background image with a transparency effect.
+ * BackgroundPanel is a custom JPanel that allows a background image to be set.
+ * The image is drawn with a specified transparency level.
  */
 public class BackgroundPanel extends JPanel {
     private Image backgroundImage;
@@ -11,7 +13,7 @@ public class BackgroundPanel extends JPanel {
     /**
      * Constructs a BackgroundPanel with the specified image file path.
      *
-     * @param filePath the path to the image file used as the background.
+     * @param filePath the path to the image file to be used as the background
      */
     public BackgroundPanel(String filePath) {
         try {
@@ -22,9 +24,9 @@ public class BackgroundPanel extends JPanel {
     }
 
     /**
-     * Overrides the paintComponent method to draw the background image with a transparency effect.
+     * Overrides the paintComponent method to draw the background image with a transparency.
      *
-     * @param g the Graphics object to protect.
+     * @param g the Graphics object to protect
      */
     @Override
     public void paintComponent(Graphics g) {
@@ -37,6 +39,11 @@ public class BackgroundPanel extends JPanel {
         }
     }
 
+    /**
+     * Gets the background image of this panel.
+     *
+     * @return the background image
+     */
     public Image getBackgroundImage() {
         return backgroundImage;
     }

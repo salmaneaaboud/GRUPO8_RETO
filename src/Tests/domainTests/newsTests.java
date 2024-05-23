@@ -6,8 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the News class.
+ */
 public class newsTests {
 
+    /**
+     * Test the constructor and getters of the News class.
+     */
     @Test
     @Order(1)
     public void testConstructorAndGetters() {

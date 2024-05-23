@@ -6,7 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the Player class.
+ */
 public class playerTests {
+
+    /**
+     * Test the equals method of the Player class.
+     */
     @Test
     @Order(1)
     public void testEquals() {
@@ -21,6 +28,9 @@ public class playerTests {
         assertEquals(player1, player1);
     }
 
+    /**
+     * Test the hashCode method of the Player class.
+     */
     @Test
     @Order(2)
     public void testHashCode() {
@@ -32,6 +42,9 @@ public class playerTests {
         assertNotEquals(player1.hashCode(), player3.hashCode());
     }
 
+    /**
+     * Test the toString method of the Player class.
+     */
     @Test
     @Order(3)
     public void testToString() {
@@ -41,6 +54,9 @@ public class playerTests {
         assertEquals(expectedToString, player.toString());
     }
 
+    /**
+     * Test the getters and setters of the Player class.
+     */
     @Test
     @Order(4)
     public void testGettersAndSetters() {
@@ -59,6 +75,9 @@ public class playerTests {
         assertEquals("alice@example.com", player.getEmail());
     }
 
+    /**
+     * Test the equals method with a different type.
+     */
     @Test
     @Order(5)
     public void testEqualsWithDifferentType() {
@@ -66,6 +85,9 @@ public class playerTests {
         assertNotEquals(player, "Not a Player object");
     }
 
+    /**
+     * Test the equals method with null.
+     */
     @Test
     @Order(6)
     public void testEqualsWithNull() {
@@ -73,6 +95,9 @@ public class playerTests {
         assertNotEquals(player, null);
     }
 
+    /**
+     * Test the equals method with itself.
+     */
     @Test
     @Order(7)
     public void testEqualsWithItself() {
@@ -80,6 +105,9 @@ public class playerTests {
         assertEquals(player, player);
     }
 
+    /**
+     * Test the consistency of hashCode.
+     */
     @Test
     @Order(8)
     public void testHashCodeConsistency() {

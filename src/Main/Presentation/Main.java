@@ -13,13 +13,33 @@ import java.awt.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 
+/**
+ * The main class representing the entry point of the application.
+ * Contains methods for creating and displaying the main GUI, loading character panels,
+ * news panels, and rankings, as well as utility methods for creating buttons and resetting panels.
+ */
 public class Main extends JFrame {
+    /**
+     * Connection to the database.
+     */
     public static Connection conn;
 
+    /**
+     * The central panel of the GUI.
+     */
     private static JPanel centerPanel;
 
+    /**
+     * The background panel of the GUI.
+     */
     private static BackgroundPanel backgroundPanel;
 
+    /**
+     * The main method to launch the application.
+     * Sets up the GUI and displays it.
+     *
+     * @param args The command-line arguments (not used).
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
@@ -36,6 +56,9 @@ public class Main extends JFrame {
         });
     }
 
+    /**
+     * Creates and displays the main GUI of the application.
+     */
     public static void createAndShowGUI() {
         JFrame frame = new JFrame("Warriors of God");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,6 +112,9 @@ public class Main extends JFrame {
         frame.setVisible(true);
     }
 
+    /**
+     * Loads the character panel with character information.
+     */
     public static void loadCharacterPanel() {
         resetCenterPanel(centerPanel);
         centerPanel.setOpaque(false);
@@ -109,6 +135,14 @@ public class Main extends JFrame {
         backgroundPanel.add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates a character box panel with the specified name, description, and image.
+     *
+     * @param name        The name of the character.
+     * @param description The description of the character.
+     * @param imagePath   The file path of the character image.
+     * @return The created character box panel.
+     */
     public static JPanel createCharaterBox(String name, String description, String imagePath) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -133,6 +167,12 @@ public class Main extends JFrame {
         return panel;
     }
 
+    /**
+     * Adds a mouse hover effect to the specified label with the specified icon.
+     *
+     * @param label The label to which the mouse hover effect is added.
+     * @param icon  The icon associated with the label.
+     */
     public static void addMouseHoverEffect(JLabel label, ImageIcon icon) {
         label.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -147,6 +187,11 @@ public class Main extends JFrame {
         });
     }
 
+    /**
+     * Loads the news panel with news information.
+     *
+     * @param panel The panel to which the news is loaded.
+     */
     public static void loadNews(JPanel panel) {
         resetCenterPanel(panel);
         panel.setLayout(new GridLayout(3, 1, 10, 10));
@@ -183,6 +228,11 @@ public class Main extends JFrame {
         }
     }
 
+    /**
+     * Loads the rankings panel with player and character information.
+     *
+     * @param panel The panel to which the rankings are loaded.
+     */
     public static void loadRankings(JPanel panel) {
         resetCenterPanel(panel);
 
@@ -215,11 +265,22 @@ public class Main extends JFrame {
         panel.add(charactersScrollPane);
     }
 
+    /**
+     * Scales the specified image icon to the specified dimensions.
+     * @param imageIcon The image icon to be scaled.
+     * @return The scaled image icon.
+     */
     private static ImageIcon scaleImage(ImageIcon imageIcon) {
         Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         return new ImageIcon(image);
     }
 
+    /**
+     * Creates a custom button with the specified text.
+     *
+     * @param text The text displayed on the button.
+     * @return The created custom button.
+     */
     public static JButton createCustomButton(String text) {
         JButton button = new JButton(text);
         button.setBackground(new Color(187, 125, 62));
@@ -230,6 +291,12 @@ public class Main extends JFrame {
         return button;
     }
 
+    /**
+     * Creates an authentication button with the specified text.
+     *
+     * @param text The text displayed on the button.
+     * @return The created authentication button.
+     */
     public static JButton createAuthentificationButtons(String text) {
         JButton button = new JButton(text);
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -237,6 +304,11 @@ public class Main extends JFrame {
         return button;
     }
 
+    /**
+     * Resets the specified panel by removing all components and updating its layout.
+     *
+     * @param panel The panel to be reset.
+     */
     public static void resetCenterPanel(JPanel panel){
         panel.removeAll();
         panel.revalidate();

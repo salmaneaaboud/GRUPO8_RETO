@@ -9,9 +9,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+/**
+ * Tests for the gameObject class.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class gameObjectTests {
 
+    /**
+     * Test to verify the equals() method.
+     */
     @Test
     @Order(1)
     public void testEquals() {
@@ -27,6 +33,9 @@ public class gameObjectTests {
         assertEquals(object1, object4);
     }
 
+    /**
+     * Test to verify the hashCode() method.
+     */
     @Test
     @Order(2)
     public void testHashCode() {
@@ -39,6 +48,9 @@ public class gameObjectTests {
         assertNotEquals(object1.hashCode(), object3.hashCode());
     }
 
+    /**
+     * Test to verify the toString() method.
+     */
     @Test
     @Order(3)
     public void testToString() {
@@ -48,6 +60,9 @@ public class gameObjectTests {
         assertEquals(expectedToString, object.toString());
     }
 
+    /**
+     * Test to verify the getters and setters methods.
+     */
     @Test
     @Order(4)
     public void testGettersAndSetters() {
@@ -58,11 +73,13 @@ public class gameObjectTests {
         assertEquals("A sharp blade", object.getDescription());
         assertEquals(100, object.getPrice());
 
+        // Test setters
         object.setObjectId("2");
         object.setName("Shield");
         object.setDescription("A sturdy shield");
         object.setPrice(150);
 
+        // Verify that the getters return the updated values
         assertEquals("2", object.getObjectId());
         assertEquals("Shield", object.getName());
         assertEquals("A sturdy shield", object.getDescription());
