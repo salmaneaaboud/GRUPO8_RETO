@@ -1,0 +1,9 @@
+Exceptions
+Main.businessLogic
+Main.Domain
+Main.Persistance
+Main.Presentation
+Tests.businessLogicTests
+Tests.domainTests
+Tests.persistanceTests
+Tests.presentationTests
